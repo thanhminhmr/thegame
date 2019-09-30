@@ -20,8 +20,10 @@ public final class Main extends Application {
 		final GameController gameController = new GameController(graphicsContext);
 
 		canvas.setFocusTraversable(true);
-		canvas.setOnKeyPressed(gameController::keyPressHandler);
-		canvas.setOnMouseClicked(gameController::mouseClickHandler);
+		canvas.setOnKeyPressed(gameController::keyDownHandler);
+		canvas.setOnKeyReleased(gameController::keyUpHandler);
+		canvas.setOnMousePressed(gameController::mouseDownHandler);
+		canvas.setOnMouseReleased(gameController::mouseUpHandler);
 		graphicsContext.setFontSmoothingType(FontSmoothingType.LCD);
 
 		primaryStage.setResizable(false);

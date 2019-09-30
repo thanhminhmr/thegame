@@ -1,25 +1,20 @@
 package mrmathami.thegame.field.tile;
 
 import mrmathami.thegame.field.GameField;
-import mrmathami.thegame.field.AbstractEntity;
-import mrmathami.thegame.field.characteristic.CollidableEntity;
+import mrmathami.thegame.field.characteristic.DestroyableEntity;
 import mrmathami.thegame.field.characteristic.LivingEntity;
 import mrmathami.thegame.field.characteristic.UpdatableEntity;
-import mrmathami.thegame.field.listener.DestroyListener;
 
 import javax.annotation.Nonnull;
-import java.util.Set;
 
-public final class Bomb extends AbstractEntity implements UpdatableEntity, CollidableEntity, LivingEntity, DestroyListener {
-	private static final Set<Class<?>> COLLISION_SET = Set.of(Wall.class);
-
+public final class Bomb extends AbstractTile implements UpdatableEntity, LivingEntity, DestroyableEntity.DestroyListener {
 	private final float strength;
 	private final int length;
 	private int tickDown;
 	private float health;
 
-	public Bomb(int createdTick, float posX, float posY, float strength, int length, int tickDown, float health) {
-		super(createdTick, posX, posY, 1.0f, 1.0f);
+	public Bomb(int createdTick, int posX, int posY, float strength, int length, int tickDown, float health) {
+		super(createdTick, posX, posY, 1, 1);
 		this.strength = strength;
 		this.length = length;
 		this.tickDown = tickDown;
@@ -29,11 +24,6 @@ public final class Bomb extends AbstractEntity implements UpdatableEntity, Colli
 	@Override
 	public void doUpdate(@Nonnull GameField field, int tickCount) {
 		this.tickDown -= 1;
-	}
-
-	@Override
-	public <E extends CollidableEntity> boolean canCollide(Class<E> entityClass) {
-		return COLLISION_SET.contains(entityClass);
 	}
 
 	@Override
@@ -59,6 +49,6 @@ public final class Bomb extends AbstractEntity implements UpdatableEntity, Colli
 
 	@Override
 	public void onDestroy(@Nonnull GameField field, int tickCount) {
-		field.doSpawn(new Flare(tickCount, getPosX(), getPosY(), strength, length, Flare.DIRECTION_ALL));
+		field.doSpawn(new Flare(tickCount, Math.round(getPosX()), Math.round(getPosY()), strength, length, Flare.DIRECTION_ALL));
 	}
 }

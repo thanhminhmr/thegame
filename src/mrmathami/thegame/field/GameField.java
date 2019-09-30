@@ -2,12 +2,10 @@ package mrmathami.thegame.field;
 
 
 import mrmathami.thegame.Config;
-import mrmathami.thegame.field.GameEntity;
-import mrmathami.thegame.field.characteristic.CollidableEntity;
 import mrmathami.thegame.field.characteristic.DestroyableEntity;
+import mrmathami.thegame.field.characteristic.EffectEntity;
+import mrmathami.thegame.field.characteristic.LivingEntity;
 import mrmathami.thegame.field.characteristic.UpdatableEntity;
-import mrmathami.thegame.field.listener.CollisionListener;
-import mrmathami.thegame.field.listener.DestroyListener;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -16,12 +14,9 @@ import java.util.*;
  * Game Field. Create from map. Represent the currently playing game.
  */
 public final class GameField {
-	@Nonnull private final Set<GameEntity> entities =
-			new LinkedHashSet<>(Config.TILE_HORIZONTAL * Config.TILE_VERTICAL);
-	@Nonnull private final List<GameEntity> spawnEntities =
-			new ArrayList<>(Config.TILE_HORIZONTAL * Config.TILE_VERTICAL);
-	@Nonnull private final Map<FloatRect, List<GameEntity>> overlappedCache =
-			new HashMap<>(Config.TILE_HORIZONTAL * Config.TILE_VERTICAL);
+	@Nonnull private final Set<GameEntity> entities = new LinkedHashSet<>(Config.TILE_MAP_COUNT);
+	@Nonnull private final Collection<GameEntity> unmodifiableEntities = Collections.unmodifiableCollection(entities);
+	@Nonnull private final List<GameEntity> spawnEntities = new ArrayList<>(Config.TILE_MAP_COUNT);
 
 	private final float width;
 	private final float height;
@@ -47,21 +42,7 @@ public final class GameField {
 
 	@Nonnull
 	public final Collection<GameEntity> getEntities() {
-		return Collections.unmodifiableCollection(entities);
-	}
-
-	public final List<GameEntity> getOverlappedEntities(float posX, float posY, float width, float height) {
-		final FloatRect rect = new FloatRect(posX, posY, width, height);
-		final List<GameEntity> gameEntities = overlappedCache.get(rect);
-		if (gameEntities != null) return gameEntities;
-
-		final List<GameEntity> entities = new ArrayList<>(Config.TILE_HORIZONTAL * Config.TILE_VERTICAL);
-		for (final GameEntity entity : this.entities) {
-			if (entity.isBeingOverlapped(posX, posY, width, height)) entities.add(entity);
-		}
-		final List<GameEntity> readOnlyEntities = List.copyOf(entities);
-		overlappedCache.put(rect, readOnlyEntities);
-		return readOnlyEntities;
+		return unmodifiableEntities;
 	}
 
 	public final void doSpawn(@Nonnull GameEntity entity) {
@@ -74,68 +55,31 @@ public final class GameField {
 		for (final GameEntity entity : entities) {
 			if (entity instanceof UpdatableEntity) ((UpdatableEntity) entity).doUpdate(this, tickCount);
 		}
+
 		for (final GameEntity entity : entities) {
-			if (entity instanceof CollisionListener) {
-				final CollisionListener collisionListener = (CollisionListener) entity;
-				final List<GameEntity> overlappedEntities = getOverlappedEntities(entity.getPosX(), entity.getPosY(), entity.getWidth(), entity.getHeight());
-				for (final GameEntity overlappedEntity : overlappedEntities) {
-					if (overlappedEntity instanceof CollidableEntity && collisionListener.canCollide(((CollidableEntity) overlappedEntity).getClass())) {
-						collisionListener.onCollision(this, tickCount, (CollidableEntity) overlappedEntity);
+			if (entity instanceof EffectEntity) {
+				final EffectEntity effectEntity = (EffectEntity) entity;
+				for (final GameEntity overlappedEntity : GameEntities.getOverlappedEntities(entities, entity.getPosX(), entity.getPosY(), entity.getWidth(), entity.getHeight())) {
+					if (overlappedEntity instanceof LivingEntity) {
+						effectEntity.doEffect(this, tickCount, (LivingEntity) overlappedEntity);
+						if (effectEntity.isDestroyed()) break;
 					}
 				}
 			}
 		}
-		final List<GameEntity> destroyedEntities = new ArrayList<>(Config.TILE_HORIZONTAL * Config.TILE_VERTICAL);
+
+		final List<GameEntity> destroyedEntities = new ArrayList<>(Config.TILE_MAP_COUNT);
 		for (final GameEntity entity : entities) {
-			if (entity instanceof DestroyableEntity) {
-				final DestroyableEntity destroyableEntity = (DestroyableEntity) entity;
-				if (destroyableEntity.isDestroyed()) {
-					if (entity instanceof DestroyListener) ((DestroyListener) entity).onDestroy(this, tickCount);
-					destroyedEntities.add(destroyableEntity);
-				}
+			if (entity instanceof DestroyableEntity && ((DestroyableEntity) entity).isDestroyed()) {
+				if (entity instanceof DestroyableEntity.DestroyListener) ((DestroyableEntity.DestroyListener) entity).onDestroy(this, tickCount);
+				destroyedEntities.add(entity);
 			}
 		}
 		entities.removeAll(destroyedEntities);
 
-		entities.removeIf(this::testEntityInsideField);
+		entities.removeIf(entity -> !entity.isBeingOverlapped(0.0f, 0.0f, width, height));
 
 		entities.addAll(spawnEntities);
 		spawnEntities.clear();
-		overlappedCache.clear();
-	}
-
-	private boolean testEntityInsideField(GameEntity entity) {
-		return !entity.isBeingOverlapped(0.0f, 0.0f, width, height);
-	}
-
-	private final static class FloatRect {
-		private final float posX;
-		private final float posY;
-		private final float width;
-		private final float height;
-
-		private FloatRect(float posX, float posY, float width, float height) {
-			this.posX = posX;
-			this.posY = posY;
-			this.width = width;
-			this.height = height;
-		}
-
-		@Override
-		public final boolean equals(Object object) {
-			if (this == object) return true;
-			if (object == null || getClass() != object.getClass()) return false;
-			final FloatRect floatRect = (FloatRect) object;
-			return floatRect.posX == posX && floatRect.posY == posY
-					&& floatRect.width == width && floatRect.height == height;
-		}
-
-		@Override
-		public final int hashCode() {
-			return Integer.rotateLeft(Float.floatToIntBits(posX), 13)
-					^ Integer.rotateLeft(Float.floatToIntBits(posY), 7)
-					^ Integer.rotateLeft(Float.floatToIntBits(width), 3)
-					^ Float.floatToIntBits(height);
-		}
 	}
 }

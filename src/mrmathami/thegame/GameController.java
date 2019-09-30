@@ -3,17 +3,17 @@ package mrmathami.thegame;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.WindowEvent;
 import mrmathami.thegame.drawer.GameDrawer;
 import mrmathami.thegame.field.GameField;
-import mrmathami.thegame.field.tile.Bomb;
+import mrmathami.thegame.field.entity.Player;
 import mrmathami.thegame.field.tile.Wall;
 import mrmathami.utilities.ThreadFactoryBuilder;
 
-import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -36,6 +36,7 @@ public final class GameController extends AnimationTimer {
 	 */
 	private final GraphicsContext graphicsContext;
 
+	private Player player;
 	/**
 	 * Game field. Contain everything in the current game field.
 	 * Responsible to update the field every tick.
@@ -60,6 +61,7 @@ public final class GameController extends AnimationTimer {
 
 	/**
 	 * The constructor.
+	 *
 	 * @param graphicsContext the screen to draw on
 	 */
 	public GameController(GraphicsContext graphicsContext) {
@@ -67,16 +69,19 @@ public final class GameController extends AnimationTimer {
 		this.graphicsContext = graphicsContext;
 
 		// Just a few acronyms.
-		final float width = Config.TILE_HORIZONTAL;
-		final float height = Config.TILE_VERTICAL;
+		final int width = Config.TILE_HORIZONTAL;
+		final int height = Config.TILE_VERTICAL;
+
+		this.player = new Player(0, 1.0f, 1.0f, 0.9f, 0.9f, 10000.0f);
 
 		// The game field. Please consider create another way to load a game field.
 		// I don't have much time, so, spawn some wall then :)
 		this.field = new GameField(width, height);
-		field.doSpawn(new Wall(0, 0.0f, 0.0f, width, 1.0f));
-		field.doSpawn(new Wall(0, 0.0f, height - 1.0f, width, 1.0f));
-		field.doSpawn(new Wall(0, 0.0f, 1.0f, 1.0f, height - 2.0f));
-		field.doSpawn(new Wall(0, width - 1.0f, 1.0f, 1.0f, height - 2.0f));
+		field.doSpawn(new Wall(0, 0, 0, width, 1));
+		field.doSpawn(new Wall(0, 0, height - 1, width, 1));
+		field.doSpawn(new Wall(0, 0, 1, 1, height - 2));
+		field.doSpawn(new Wall(0, width - 1, 1, 1, height - 2));
+		field.doSpawn(player);
 
 		// The drawer. Nothing fun here.
 		this.drawer = new GameDrawer(graphicsContext, field);
@@ -92,6 +97,7 @@ public final class GameController extends AnimationTimer {
 
 	/**
 	 * A JavaFX loop. Just don't touch me.
+	 *
 	 * @param now not used. It is a timestamp in nanosecond.
 	 */
 	@Override
@@ -129,27 +135,71 @@ public final class GameController extends AnimationTimer {
 		super.start();
 	}
 
-	public final void closeRequestHandler(WindowEvent windowEvent) {
+	final void closeRequestHandler(WindowEvent windowEvent) {
 		scheduledFuture.cancel(true);
 		stop();
 		Platform.exit();
 		System.exit(0);
 	}
 
-	public final void mouseClickHandler(MouseEvent mouseEvent) {
-		final Random random = new Random();
-		field.doSpawn(new Bomb(
-				field.getTickCount(),
-				random.nextInt(Config.TILE_HORIZONTAL - 2) + 1,
-				random.nextInt(Config.TILE_VERTICAL - 2) + 1,
-				30.0f,
-				10,
-				Config.GAME_TPS * 3,
-				1.0f
-		));
+//	final void mouseClickHandler(MouseEvent mouseEvent) {
+////		final Random random = new Random();
+////		field.doSpawn(new Bomb(
+////				field.getTickCount(),
+////				random.nextInt(Config.TILE_HORIZONTAL - 2) + 1,
+////				random.nextInt(Config.TILE_VERTICAL - 2) + 1,
+////				30.0f,
+////				10,
+////				Config.GAME_TPS * 3,
+////				1.0f
+////		));
+//	}
+
+	final void keyDownHandler(KeyEvent keyEvent) {
+		final KeyCode keyCode = keyEvent.getCode();
+		if (keyCode == KeyCode.W) {
+			player.onKeyDown(Player.KEY_UP);
+		} else if (keyCode == KeyCode.S) {
+			player.onKeyDown(Player.KEY_DOWN);
+		} else if (keyCode == KeyCode.A) {
+			player.onKeyDown(Player.KEY_LEFT);
+		} else if (keyCode == KeyCode.D) {
+			player.onKeyDown(Player.KEY_RIGHT);
+		} else if (keyCode == KeyCode.I) {
+			player.onKeyDown(Player.KEY_A);
+		} else if (keyCode == KeyCode.J) {
+			player.onKeyDown(Player.KEY_B);
+		} else if (keyCode == KeyCode.K) {
+			player.onKeyDown(Player.KEY_X);
+		} else if (keyCode == KeyCode.L) {
+			player.onKeyDown(Player.KEY_Y);
+		}
 	}
 
-	public final void keyPressHandler(KeyEvent keyEvent) {
+	final void keyUpHandler(KeyEvent keyEvent) {
+		final KeyCode keyCode = keyEvent.getCode();
+		if (keyCode == KeyCode.W) {
+			player.onKeyUp(Player.KEY_UP);
+		} else if (keyCode == KeyCode.S) {
+			player.onKeyUp(Player.KEY_DOWN);
+		} else if (keyCode == KeyCode.A) {
+			player.onKeyUp(Player.KEY_LEFT);
+		} else if (keyCode == KeyCode.D) {
+			player.onKeyUp(Player.KEY_RIGHT);
+		} else if (keyCode == KeyCode.I) {
+			player.onKeyUp(Player.KEY_A);
+		} else if (keyCode == KeyCode.J) {
+			player.onKeyUp(Player.KEY_B);
+		} else if (keyCode == KeyCode.K) {
+			player.onKeyUp(Player.KEY_X);
+		} else if (keyCode == KeyCode.L) {
+			player.onKeyUp(Player.KEY_Y);
+		}
 	}
 
+	final void mouseDownHandler(MouseEvent mouseEvent) {
+	}
+
+	final void mouseUpHandler(MouseEvent mouseEvent) {
+	}
 }

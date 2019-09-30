@@ -3,8 +3,14 @@ package mrmathami.thegame.drawer;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import mrmathami.thegame.Config;
-import mrmathami.thegame.field.GameField;
+import mrmathami.thegame.drawer.tile.BombDrawer;
+import mrmathami.thegame.drawer.tile.FlareDrawer;
+import mrmathami.thegame.drawer.tile.PlayerDrawer;
+import mrmathami.thegame.drawer.tile.WallDrawer;
+import mrmathami.thegame.field.GameEntities;
 import mrmathami.thegame.field.GameEntity;
+import mrmathami.thegame.field.GameField;
+import mrmathami.thegame.field.entity.Player;
 import mrmathami.thegame.field.tile.Bomb;
 import mrmathami.thegame.field.tile.Flare;
 import mrmathami.thegame.field.tile.Wall;
@@ -16,11 +22,17 @@ import java.util.List;
 import java.util.Map;
 
 public final class GameDrawer {
-	@Nonnull private static final List<Class<?>> ENTITY_DRAWING_ORDER = List.of(Wall.class, Flare.class, Bomb.class);
+	@Nonnull private static final List<Class<?>> ENTITY_DRAWING_ORDER = List.of(
+			Bomb.class,
+			Player.class,
+			Flare.class,
+			Wall.class
+	);
 	@Nonnull private static final Map<Class<?>, EntityDrawer> ENTITY_DRAWER_MAP = Map.of(
-			Wall.class, new WallDrawer(),
+			Bomb.class, new BombDrawer(),
+			Player.class, new PlayerDrawer(),
 			Flare.class, new FlareDrawer(),
-			Bomb.class, new BombDrawer()
+			Wall.class, new WallDrawer()
 	);
 
 	@Nonnull private final GraphicsContext graphicsContext;
@@ -52,8 +64,8 @@ public final class GameDrawer {
 	}
 
 	public final void render(float posX, float posY, float zoom) {
-		final List<GameEntity> entities = new ArrayList<>(gameField.getOverlappedEntities(posX, posY,
-				Config.SCREEN_WIDTH / zoom, Config.SCREEN_HEIGHT / zoom));
+		final List<GameEntity> entities = new ArrayList<>(GameEntities.getOverlappedEntities(gameField.getEntities(),
+				posX, posY, Config.SCREEN_WIDTH / zoom, Config.SCREEN_HEIGHT / zoom));
 		entities.sort(GameDrawer::entityDrawingOrderComparator);
 
 		graphicsContext.setFill(Color.BLACK);

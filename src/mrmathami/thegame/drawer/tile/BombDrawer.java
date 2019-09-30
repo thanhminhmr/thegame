@@ -1,15 +1,16 @@
-package mrmathami.thegame.drawer;
+package mrmathami.thegame.drawer.tile;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import mrmathami.thegame.drawer.EntityDrawer;
 import mrmathami.thegame.field.GameEntity;
 
 import javax.annotation.Nonnull;
 
-public final class FlareDrawer implements EntityDrawer {
+public final class BombDrawer implements EntityDrawer {
 	@Override
 	public void draw(@Nonnull GraphicsContext graphicsContext, @Nonnull GameEntity entity, float screenPosX, float screenPosY, float screenWidth, float screenHeight, float zoom) {
-		graphicsContext.setFill(Color.ORANGERED);
-		graphicsContext.fillRoundRect(screenPosX, screenPosY, screenWidth, screenHeight, 1, 1);
+		graphicsContext.setFill(Color.YELLOW);
+		graphicsContext.fillOval(screenPosX, screenPosY, screenWidth, screenHeight);
 	}
 }

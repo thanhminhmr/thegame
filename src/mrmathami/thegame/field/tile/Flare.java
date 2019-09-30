@@ -1,20 +1,19 @@
 package mrmathami.thegame.field.tile;
 
 import mrmathami.thegame.Config;
-import mrmathami.thegame.field.GameField;
 import mrmathami.thegame.field.AbstractEntity;
+import mrmathami.thegame.field.GameEntities;
 import mrmathami.thegame.field.GameEntity;
-import mrmathami.thegame.field.characteristic.CollidableEntity;
+import mrmathami.thegame.field.GameField;
 import mrmathami.thegame.field.characteristic.DestroyableEntity;
+import mrmathami.thegame.field.characteristic.EffectEntity;
 import mrmathami.thegame.field.characteristic.LivingEntity;
 import mrmathami.thegame.field.characteristic.UpdatableEntity;
-import mrmathami.thegame.field.listener.CollisionListener;
 
 import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.Set;
+import java.util.Collection;
 
-public final class Flare extends AbstractEntity implements UpdatableEntity, CollidableEntity, CollisionListener, DestroyableEntity {
+public final class Flare extends AbstractEntity implements UpdatableEntity, EffectEntity, DestroyableEntity, GameEntity {
 	public static final int DIRECTION_UP = 1;
 	public static final int DIRECTION_DOWN = 1 << 1;
 	public static final int DIRECTION_LEFT = 1 << 2;
@@ -25,25 +24,23 @@ public final class Flare extends AbstractEntity implements UpdatableEntity, Coll
 	public static final int DIRECTION_DOWN_RIGHT = DIRECTION_DOWN | DIRECTION_RIGHT;
 	public static final int DIRECTION_ALL = DIRECTION_UP | DIRECTION_DOWN | DIRECTION_LEFT | DIRECTION_RIGHT;
 
-	private static final Set<Class<?>> COLLISION_SET = Set.of(Bomb.class, Wall.class);
-
 	private final float strength;
 	private final int length;
 	private final int direction;
 
 	private int tickDown = Config.FLARE_TICK_DOWN;
 
-	public Flare(int createdTick, float posX, float posY, float strength, int length, int direction) {
-		super(createdTick, posX, posY, 1.0f, 1.0f);
+	public Flare(int createdTick, int posX, int posY, float strength, int length, int direction) {
+		super(createdTick, posX, posY, 1, 1);
 		this.strength = strength;
 		this.length = length;
 		this.direction = direction;
 	}
 
-	private boolean spawnFlare(@Nonnull GameField field, int tickCount, float posX, float posY, int direction) {
-		final List<GameEntity> entities = field.getOverlappedEntities(posX, posY, 1.0f, 1.0f);
+	private boolean spawnFlare(@Nonnull GameField field, int tickCount, int posX, int posY, int direction) {
+		final Collection<GameEntity> entities = GameEntities.getOverlappedEntities(field.getEntities(), posX, posY, 1.0f, 1.0f);
 		for (final GameEntity entity : entities) {
-			if (entity instanceof CollidableEntity && ((CollidableEntity) entity).canCollide(Flare.class)) return false;
+			if (GameEntities.canCollide(Flare.class, entity.getClass())) return false;
 		}
 		field.doSpawn(new Flare(tickCount, posX, posY, strength, length - 1, direction));
 		return true;
@@ -53,37 +50,33 @@ public final class Flare extends AbstractEntity implements UpdatableEntity, Coll
 	public void doUpdate(@Nonnull GameField field, int tickCount) {
 		this.tickDown -= 1;
 		if (length > 0 && tickDown == Config.FLARE_TICK_SPREAD) {
+			final int posX = Math.round(getPosX());
+			final int posY = Math.round(getPosY());
+			
 			int combineDirection = 0;
-			if ((direction & DIRECTION_UP) != 0 && spawnFlare(field, tickCount, getPosX(), getPosY() - 1.0f, DIRECTION_UP))
+			if ((direction & DIRECTION_UP) != 0 && spawnFlare(field, tickCount, posX, posY - 1, DIRECTION_UP))
 				combineDirection |= DIRECTION_UP;
-			if ((direction & DIRECTION_DOWN) != 0 && spawnFlare(field, tickCount, getPosX(), getPosY() + 1.0f, DIRECTION_DOWN))
+			if ((direction & DIRECTION_DOWN) != 0 && spawnFlare(field, tickCount, posX, posY + 1, DIRECTION_DOWN))
 				combineDirection |= DIRECTION_DOWN;
-			if ((direction & DIRECTION_LEFT) != 0 && spawnFlare(field, tickCount, getPosX() - 1.0f, getPosY(), DIRECTION_LEFT))
+			if ((direction & DIRECTION_LEFT) != 0 && spawnFlare(field, tickCount, posX - 1, posY, DIRECTION_LEFT))
 				combineDirection |= DIRECTION_LEFT;
-			if ((direction & DIRECTION_RIGHT) != 0 && spawnFlare(field, tickCount, getPosX() + 1.0f, getPosY(), DIRECTION_RIGHT))
+			if ((direction & DIRECTION_RIGHT) != 0 && spawnFlare(field, tickCount, posX + 1, posY, DIRECTION_RIGHT))
 				combineDirection |= DIRECTION_RIGHT;
 
 			if ((combineDirection & DIRECTION_UP_LEFT) == DIRECTION_UP_LEFT)
-				spawnFlare(field, tickCount, getPosX() - 1.0f, getPosY() - 1.0f, DIRECTION_UP_LEFT);
+				spawnFlare(field, tickCount, posX - 1, posY - 1, DIRECTION_UP_LEFT);
 			if ((combineDirection & DIRECTION_UP_RIGHT) == DIRECTION_UP_RIGHT)
-				spawnFlare(field, tickCount, getPosX() + 1.0f, getPosY() - 1.0f, DIRECTION_UP_RIGHT);
+				spawnFlare(field, tickCount, posX + 1, posY - 1, DIRECTION_UP_RIGHT);
 			if ((combineDirection & DIRECTION_DOWN_LEFT) == DIRECTION_DOWN_LEFT)
-				spawnFlare(field, tickCount, getPosX() - 1.0f, getPosY() + 1.0f, DIRECTION_DOWN_LEFT);
+				spawnFlare(field, tickCount, posX - 1, posY + 1, DIRECTION_DOWN_LEFT);
 			if ((combineDirection & DIRECTION_DOWN_RIGHT) == DIRECTION_DOWN_RIGHT)
-				spawnFlare(field, tickCount, getPosX() + 1.0f, getPosY() + 1.0f, DIRECTION_DOWN_RIGHT);
+				spawnFlare(field, tickCount, posX + 1, posY + 1, DIRECTION_DOWN_RIGHT);
 		}
 	}
 
 	@Override
-	public <E extends CollidableEntity> boolean canCollide(Class<E> entityClass) {
-		return COLLISION_SET.contains(entityClass);
-	}
-
-	@Override
-	public void onCollision(@Nonnull GameField field, int tickCount, CollidableEntity collidableEntity) {
-		if (collidableEntity instanceof LivingEntity) {
-			((LivingEntity) collidableEntity).doEffect(-strength);
-		}
+	public void doEffect(@Nonnull GameField field, int tickCount, @Nonnull LivingEntity livingEntity) {
+		livingEntity.doEffect(-strength);
 	}
 
 	@Override
