@@ -19,6 +19,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * A game controller. Everything about the game should be managed in here.
+ */
 public final class GameController extends AnimationTimer {
 	/**
 	 * Advance stuff. Just don't touch me. Google me if you are curious.
@@ -36,14 +39,20 @@ public final class GameController extends AnimationTimer {
 	 */
 	private final GraphicsContext graphicsContext;
 
+	/**
+	 * The player entity. Because it can receive keyboard and/or mouse event,
+	 * it should be put in here. If we need multi-player, use an array of Players.
+	 */
 	private Player player;
 	/**
 	 * Game field. Contain everything in the current game field.
 	 * Responsible to update the field every tick.
+	 * Kinda advance, modify if you are sure about your change.
 	 */
 	private GameField field;
 	/**
 	 * Game drawer. Responsible to draw the field every tick.
+	 * Kinda advance, modify if you are sure about your change.
 	 */
 	private GameDrawer drawer;
 
@@ -85,6 +94,12 @@ public final class GameController extends AnimationTimer {
 
 		// The drawer. Nothing fun here.
 		this.drawer = new GameDrawer(graphicsContext, field);
+
+		// Field view region is a rectangle region
+		// [(posX, posY), (posX + SCREEN_WIDTH / zoom, posY + SCREEN_HEIGHT / zoom)]
+		// that the drawer will select and draw everything in it in an self-defined order.
+		// Can be modified to support zoom in / zoom out of the map.
+		drawer.setFieldViewRegion(0.0f, 0.0f, Config.TILE_SIZE);
 	}
 
 	/**
@@ -96,25 +111,30 @@ public final class GameController extends AnimationTimer {
 	}
 
 	/**
-	 * A JavaFX loop. Just don't touch me.
+	 * A JavaFX loop.
+	 * Kinda advance, modify if you are sure about your change.
 	 *
 	 * @param now not used. It is a timestamp in nanosecond.
 	 */
 	@Override
 	public void handle(long now) {
+		// don't touch me.
 		final int currentTick = tick;
 		final long startNs = System.nanoTime();
 
-		// do a tick
+		// do a tick, as fast as possible
 		field.tick();
 
-//		// if it's too late to draw a new frame, skip it
+//		// if it's too late to draw a new frame, skip it.
+//		// make the game feel really laggy, so...
 //		if (currentTick != tick) return;
 
-		// draw a new frame
-		drawer.render(0.0f, 0.0f, Config.TILE_SIZE);
+		// draw a new frame, as fast as possible.
+		drawer.render();
 
-		// MSPT display, see Config for more information
+		// MSPT display. MSPT stand for Milliseconds Per Tick.
+		// It means how many ms your game spend to update and then draw the game once.
+		// Draw it out mostly for debug
 		final float mspt = (System.nanoTime() - startNs) / 1000000.0f;
 		graphicsContext.setFill(Color.BLACK);
 		graphicsContext.fillText(String.format("MSPT: %3.2f", mspt), 0, 12);
@@ -135,6 +155,11 @@ public final class GameController extends AnimationTimer {
 		super.start();
 	}
 
+	/**
+	 * On window close request.
+	 * Kinda advance, modify if you are sure about your change.
+	 * @param windowEvent currently not used
+	 */
 	final void closeRequestHandler(WindowEvent windowEvent) {
 		scheduledFuture.cancel(true);
 		stop();
@@ -142,19 +167,10 @@ public final class GameController extends AnimationTimer {
 		System.exit(0);
 	}
 
-//	final void mouseClickHandler(MouseEvent mouseEvent) {
-////		final Random random = new Random();
-////		field.doSpawn(new Bomb(
-////				field.getTickCount(),
-////				random.nextInt(Config.TILE_HORIZONTAL - 2) + 1,
-////				random.nextInt(Config.TILE_VERTICAL - 2) + 1,
-////				30.0f,
-////				10,
-////				Config.GAME_TPS * 3,
-////				1.0f
-////		));
-//	}
-
+	/**
+	 * Key down handler.
+	 * @param keyEvent the key that you press down
+	 */
 	final void keyDownHandler(KeyEvent keyEvent) {
 		final KeyCode keyCode = keyEvent.getCode();
 		if (keyCode == KeyCode.W) {
@@ -176,6 +192,10 @@ public final class GameController extends AnimationTimer {
 		}
 	}
 
+	/**
+	 * Key up handler.
+	 * @param keyEvent the key that you release up.
+	 */
 	final void keyUpHandler(KeyEvent keyEvent) {
 		final KeyCode keyCode = keyEvent.getCode();
 		if (keyCode == KeyCode.W) {
@@ -197,9 +217,25 @@ public final class GameController extends AnimationTimer {
 		}
 	}
 
+	/**
+	 * Mouse down handler.
+	 * @param mouseEvent the mouse button you press down.
+	 */
 	final void mouseDownHandler(MouseEvent mouseEvent) {
+//		mouseEvent.getButton(); // which mouse button?
+//		// Screen coordinate. Remember to convert to field coordinate
+//		drawer.screenToFieldPosX(mouseEvent.getX());
+//		drawer.screenToFieldPosY(mouseEvent.getY());
 	}
 
+	/**
+	 * Mouse up handler.
+	 * @param mouseEvent the mouse button you release up.
+	 */
 	final void mouseUpHandler(MouseEvent mouseEvent) {
+//		mouseEvent.getButton(); // which mouse button?
+//		// Screen coordinate. Remember to convert to field coordinate
+//		drawer.screenToFieldPosX(mouseEvent.getX());
+//		drawer.screenToFieldPosY(mouseEvent.getY());
 	}
 }

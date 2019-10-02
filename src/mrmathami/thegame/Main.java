@@ -8,6 +8,9 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.FontSmoothingType;
 import javafx.stage.Stage;
 
+/**
+ * Main class. Entry point of the game.
+ */
 public final class Main extends Application {
 	public static void main(String[] args) {
 		Application.launch(args);
@@ -20,11 +23,19 @@ public final class Main extends Application {
 		final GameController gameController = new GameController(graphicsContext);
 
 		canvas.setFocusTraversable(true);
+		graphicsContext.setFontSmoothingType(FontSmoothingType.LCD);
+
+
+		// keyboard and mouse events to catch. Add if you need more
 		canvas.setOnKeyPressed(gameController::keyDownHandler);
 		canvas.setOnKeyReleased(gameController::keyUpHandler);
+//		canvas.setOnKeyTyped(...);
+
 		canvas.setOnMousePressed(gameController::mouseDownHandler);
 		canvas.setOnMouseReleased(gameController::mouseUpHandler);
-		graphicsContext.setFontSmoothingType(FontSmoothingType.LCD);
+//		canvas.setOnMouseClicked(...);
+//		canvas.setOnMouseMoved(...);
+
 
 		primaryStage.setResizable(false);
 		primaryStage.setTitle(Config.GAME_NAME);

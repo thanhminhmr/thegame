@@ -5,7 +5,7 @@ import javafx.scene.paint.Color;
 import mrmathami.thegame.Config;
 import mrmathami.thegame.drawer.tile.BombDrawer;
 import mrmathami.thegame.drawer.tile.FlareDrawer;
-import mrmathami.thegame.drawer.tile.PlayerDrawer;
+import mrmathami.thegame.drawer.Entity.PlayerDrawer;
 import mrmathami.thegame.drawer.tile.WallDrawer;
 import mrmathami.thegame.field.GameEntities;
 import mrmathami.thegame.field.GameEntity;
@@ -36,7 +36,10 @@ public final class GameDrawer {
 	);
 
 	@Nonnull private final GraphicsContext graphicsContext;
-	@Nonnull private final GameField gameField;
+	@Nonnull private GameField gameField;
+	private transient float fieldStartPosX = Float.NaN;
+	private transient float fieldStartPosY = Float.NaN;
+	private transient float fieldZoom = Float.NaN;
 
 	public GameDrawer(@Nonnull GraphicsContext graphicsContext, @Nonnull GameField gameField) {
 		this.graphicsContext = graphicsContext;
@@ -63,26 +66,72 @@ public final class GameDrawer {
 		return ENTITY_DRAWER_MAP.get(entity.getClass());
 	}
 
-	public final void render(float posX, float posY, float zoom) {
+	public final float getFieldStartPosX() {
+		return fieldStartPosX;
+	}
+
+	public final float getFieldStartPosY() {
+		return fieldStartPosY;
+	}
+
+	public final float getFieldZoom() {
+		return fieldZoom;
+	}
+
+	public final void setGameField(@Nonnull GameField gameField) {
+		this.gameField = gameField;
+	}
+
+	public final void setFieldViewRegion(float fieldStartPosX, float fieldStartPosY, float fieldZoom) {
+		this.fieldStartPosX = fieldStartPosX;
+		this.fieldStartPosY = fieldStartPosY;
+		this.fieldZoom = fieldZoom;
+	}
+
+	public final void render() {
+		final GameField gameField = this.gameField;
+		final float fieldStartPosX = this.fieldStartPosX;
+		final float fieldStartPosY = this.fieldStartPosY;
+		final float fieldZoom = this.fieldZoom;
+
 		final List<GameEntity> entities = new ArrayList<>(GameEntities.getOverlappedEntities(gameField.getEntities(),
-				posX, posY, Config.SCREEN_WIDTH / zoom, Config.SCREEN_HEIGHT / zoom));
+				fieldStartPosX, fieldStartPosY, Config.SCREEN_WIDTH / fieldZoom, Config.SCREEN_HEIGHT / fieldZoom));
 		entities.sort(GameDrawer::entityDrawingOrderComparator);
 
 		graphicsContext.setFill(Color.BLACK);
 		graphicsContext.fillRect(0.0f, 0.0f, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
 
+		GameEntity lastEntity = null;
 		for (final GameEntity entity : entities) {
+			if (lastEntity != null && entityDrawingOrderComparator(entity, lastEntity) == 0) continue;
+			lastEntity = entity;
 			final EntityDrawer drawer = getEntityDrawer(entity);
 			if (drawer != null) {
 				drawer.draw(
 						graphicsContext, entity,
-						(entity.getPosX() - posX) * zoom,
-						(entity.getPosY() - posY) * zoom,
-						entity.getWidth() * zoom,
-						entity.getHeight() * zoom,
-						zoom
+						(entity.getPosX() - fieldStartPosX) * fieldZoom,
+						(entity.getPosY() - fieldStartPosY) * fieldZoom,
+						entity.getWidth() * fieldZoom,
+						entity.getHeight() * fieldZoom,
+						fieldZoom
 				);
 			}
 		}
+	}
+
+	public final float screenToFieldPosX(float screenPosX) {
+		return screenPosX * fieldZoom + fieldStartPosX;
+	}
+
+	public final float screenToFieldPosY(float screenPosY) {
+		return screenPosY * fieldZoom + fieldStartPosY;
+	}
+
+	public final float fieldToScreenPosX(float fieldPosX) {
+		return (fieldPosX - fieldStartPosX) / fieldZoom;
+	}
+
+	public final float fieldToScreenPosY(float fieldPosY) {
+		return (fieldPosY - fieldStartPosY) / fieldZoom;
 	}
 }

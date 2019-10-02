@@ -5,6 +5,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicLong;
 
+/**
+ * Leave me alone please.
+ */
 public final class ThreadFactoryBuilder {
 	private static final AtomicLong COUNT = new AtomicLong(0);
 	private String namePrefix = null;
@@ -15,20 +18,20 @@ public final class ThreadFactoryBuilder {
 
 	private static ThreadFactory build(ThreadFactoryBuilder builder) {
 		final ThreadFactory backingThreadFactory =
-				(builder.backingThreadFactory != null)
+				builder.backingThreadFactory != null
 						? builder.backingThreadFactory
 						: Executors.defaultThreadFactory();
 		final String namePrefix =
-				(builder.namePrefix != null)
+				builder.namePrefix != null
 						? builder.namePrefix
-						: ("ThreadFactoryBuilder-" + COUNT.getAndIncrement());
+						: "ThreadFactoryBuilder-" + COUNT.getAndIncrement();
 		final AtomicLong count = new AtomicLong(0);
 		final Boolean daemon = builder.daemon;
 		final Integer priority = builder.priority;
 		final UncaughtExceptionHandler uncaughtExceptionHandler = builder.uncaughtExceptionHandler;
 
 		return runnable -> {
-			Thread thread = backingThreadFactory.newThread(runnable);
+			final Thread thread = backingThreadFactory.newThread(runnable);
 			thread.setName(namePrefix + "-" + count.getAndIncrement());
 			if (daemon != null) thread.setDaemon(daemon);
 			if (priority != null) thread.setPriority(priority);

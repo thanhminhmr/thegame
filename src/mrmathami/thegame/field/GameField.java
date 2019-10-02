@@ -11,7 +11,7 @@ import javax.annotation.Nonnull;
 import java.util.*;
 
 /**
- * Game Field. Create from map. Represent the currently playing game.
+ * Game Field. Created from GameMap for each new stage. Represent the currently playing game.
  */
 public final class GameField {
 	@Nonnull private final Set<GameEntity> entities = new LinkedHashSet<>(Config.TILE_MAP_COUNT);

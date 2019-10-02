@@ -40,7 +40,7 @@ public final class Flare extends AbstractEntity implements UpdatableEntity, Effe
 	private boolean spawnFlare(@Nonnull GameField field, int tickCount, int posX, int posY, int direction) {
 		final Collection<GameEntity> entities = GameEntities.getOverlappedEntities(field.getEntities(), posX, posY, 1.0f, 1.0f);
 		for (final GameEntity entity : entities) {
-			if (GameEntities.canCollide(Flare.class, entity.getClass())) return false;
+			if (GameEntities.isCollidable(Flare.class, entity.getClass())) return false;
 		}
 		field.doSpawn(new Flare(tickCount, posX, posY, strength, length - 1, direction));
 		return true;

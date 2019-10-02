@@ -30,6 +30,20 @@ public final class Player extends AbstractEntity implements PlayerEntity, Updata
 		this.health = health;
 	}
 
+	private static boolean checkCollisionSafe(@Nonnull GameField field, float posX, float posY, float width, float height) {
+		for (final GameEntity entity : GameEntities.getOverlappedEntities(field.getEntities(), posX, posY, width, height)) {
+			if (GameEntities.isCollidable(Player.class, entity.getClass())) return false;
+		}
+		return true;
+	}
+
+	private static boolean checkBombSpawnSafe(@Nonnull GameField field, int posX, int posY) {
+		for (final GameEntity entity : GameEntities.getOverlappedEntities(field.getEntities(), posX, posY, 1.0f, 1.0f)) {
+			if (GameEntities.isCollidable(Bomb.class, entity.getClass())) return false;
+		}
+		return true;
+	}
+
 	@Override
 	public synchronized void onKeyDown(int key) {
 		this.keyPressing |= key;
@@ -38,20 +52,6 @@ public final class Player extends AbstractEntity implements PlayerEntity, Updata
 	@Override
 	public synchronized void onKeyUp(int key) {
 		this.keyPressing &= ~key;
-	}
-
-	private boolean checkCollisionSafe(@Nonnull GameField field, float posX, float posY, float width, float height) {
-		for (final GameEntity entity : GameEntities.getOverlappedEntities(field.getEntities(), posX, posY, width, height)) {
-			if (GameEntities.canCollide(Player.class, entity.getClass())) return false;
-		}
-		return true;
-	}
-
-	private boolean checkBombSpawnSafe(@Nonnull GameField field, int posX, int posY) {
-		for (final GameEntity entity : GameEntities.getOverlappedEntities(field.getEntities(), posX, posY, 1.0f, 1.0f)) {
-			if (GameEntities.canCollide(Bomb.class, entity.getClass())) return false;
-		}
-		return true;
 	}
 
 	@Override
@@ -103,5 +103,4 @@ public final class Player extends AbstractEntity implements PlayerEntity, Updata
 	public boolean isDestroyed() {
 		return Float.isNaN(health) || health <= 0.0f;
 	}
-
 }
