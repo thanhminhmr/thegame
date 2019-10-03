@@ -1,7 +1,7 @@
 package mrmathami.thegame.field;
 
 /**
- *
+ * A game entity
  */
 public interface GameEntity {
 	/**

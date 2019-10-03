@@ -9,7 +9,7 @@ import javax.annotation.Nonnull;
 
 public final class BombDrawer implements EntityDrawer {
 	@Override
-	public void draw(@Nonnull GraphicsContext graphicsContext, @Nonnull GameEntity entity, float screenPosX, float screenPosY, float screenWidth, float screenHeight, float zoom) {
+	public void draw(int tickCount, @Nonnull GraphicsContext graphicsContext, @Nonnull GameEntity entity, float screenPosX, float screenPosY, float screenWidth, float screenHeight, float zoom) {
 		graphicsContext.setFill(Color.YELLOW);
 		graphicsContext.fillOval(screenPosX, screenPosY, screenWidth, screenHeight);
 	}

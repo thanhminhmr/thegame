@@ -11,7 +11,8 @@ import java.util.*;
 
 public final class GameEntities {
 	/**
-	 * CHANGE ME: This is a list contains Pair of Entities that can collide with each other.
+	 * TODO:
+	 * This is a list contains Pair of Entities that can collide with each other.
 	 * Remember, if an entity can collide with itself, you should put that here too.
 	 */
 	private static final Set<Pair> COLLISION_PAIR_SET = new HashSet<>(Set.of(

@@ -3,9 +3,9 @@ package mrmathami.thegame.drawer;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import mrmathami.thegame.Config;
+import mrmathami.thegame.drawer.entity.PlayerDrawer;
 import mrmathami.thegame.drawer.tile.BombDrawer;
 import mrmathami.thegame.drawer.tile.FlareDrawer;
-import mrmathami.thegame.drawer.Entity.PlayerDrawer;
 import mrmathami.thegame.drawer.tile.WallDrawer;
 import mrmathami.thegame.field.GameEntities;
 import mrmathami.thegame.field.GameEntity;
@@ -22,12 +22,22 @@ import java.util.List;
 import java.util.Map;
 
 public final class GameDrawer {
+	/**
+	 * TODO:
+	 * This is a list contains Entity type that can be drawn on screen.
+	 * Remember to add your own entity class here if it can be drawn.
+	 */
 	@Nonnull private static final List<Class<?>> ENTITY_DRAWING_ORDER = List.of(
 			Bomb.class,
 			Player.class,
 			Flare.class,
 			Wall.class
 	);
+	/**
+	 * TODO:
+	 * This is a map between Entity type and its drawer.
+	 * Remember to add your entity drawer here.
+	 */
 	@Nonnull private static final Map<Class<?>, EntityDrawer> ENTITY_DRAWER_MAP = Map.of(
 			Bomb.class, new BombDrawer(),
 			Player.class, new PlayerDrawer(),
@@ -46,7 +56,15 @@ public final class GameDrawer {
 		this.gameField = gameField;
 	}
 
-	public static int entityDrawingOrderComparator(@Nonnull GameEntity entityA, @Nonnull GameEntity entityB) {
+	/**
+	 * Do not touch me.
+	 * This is a drawing order comparator, use to sort the entity list.
+	 *
+	 * @param entityA entity A
+	 * @param entityB entity B
+	 * @return order
+	 */
+	private static int entityDrawingOrderComparator(@Nonnull GameEntity entityA, @Nonnull GameEntity entityB) {
 		final int compareOrder = Integer.compare(
 				ENTITY_DRAWING_ORDER.indexOf(entityA.getClass()),
 				ENTITY_DRAWING_ORDER.indexOf(entityB.getClass())
@@ -61,6 +79,10 @@ public final class GameDrawer {
 		return Float.compare(entityA.getHeight(), entityB.getHeight());
 	}
 
+	/**
+	 * @param entity entity
+	 * @return the drawer fot that entity, or null if that entity is not drawable.
+	 */
 	@Nullable
 	private static EntityDrawer getEntityDrawer(@Nonnull GameEntity entity) {
 		return ENTITY_DRAWER_MAP.get(entity.getClass());
@@ -82,12 +104,22 @@ public final class GameDrawer {
 		this.gameField = gameField;
 	}
 
+	/**
+	 * Set the field view region, in other words, set the region of the field that will be drawn on the screen.
+	 *
+	 * @param fieldStartPosX pos x
+	 * @param fieldStartPosY pos y
+	 * @param fieldZoom      zoom
+	 */
 	public final void setFieldViewRegion(float fieldStartPosX, float fieldStartPosY, float fieldZoom) {
 		this.fieldStartPosX = fieldStartPosX;
 		this.fieldStartPosY = fieldStartPosY;
 		this.fieldZoom = fieldZoom;
 	}
 
+	/**
+	 * Do render. Should not touch.
+	 */
 	public final void render() {
 		final GameField gameField = this.gameField;
 		final float fieldStartPosX = this.fieldStartPosX;
@@ -107,8 +139,7 @@ public final class GameDrawer {
 			lastEntity = entity;
 			final EntityDrawer drawer = getEntityDrawer(entity);
 			if (drawer != null) {
-				drawer.draw(
-						graphicsContext, entity,
+				drawer.draw(gameField.getTickCount(), graphicsContext, entity,
 						(entity.getPosX() - fieldStartPosX) * fieldZoom,
 						(entity.getPosY() - fieldStartPosY) * fieldZoom,
 						entity.getWidth() * fieldZoom,

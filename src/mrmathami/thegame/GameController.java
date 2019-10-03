@@ -10,6 +10,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.WindowEvent;
 import mrmathami.thegame.drawer.GameDrawer;
 import mrmathami.thegame.field.GameField;
+import mrmathami.thegame.field.characteristic.PlayerEntity;
 import mrmathami.thegame.field.entity.Player;
 import mrmathami.thegame.field.tile.Wall;
 import mrmathami.utilities.ThreadFactoryBuilder;
@@ -43,7 +44,7 @@ public final class GameController extends AnimationTimer {
 	 * The player entity. Because it can receive keyboard and/or mouse event,
 	 * it should be put in here. If we need multi-player, use an array of Players.
 	 */
-	private Player player;
+	private PlayerEntity player;
 	/**
 	 * Game field. Contain everything in the current game field.
 	 * Responsible to update the field every tick.
@@ -81,10 +82,11 @@ public final class GameController extends AnimationTimer {
 		final int width = Config.TILE_HORIZONTAL;
 		final int height = Config.TILE_VERTICAL;
 
+		// create new player
 		this.player = new Player(0, 1.0f, 1.0f, 0.9f, 0.9f, 10000.0f);
 
 		// The game field. Please consider create another way to load a game field.
-		// I don't have much time, so, spawn some wall then :)
+		// TODO: I don't have much time, so, spawn some wall then :)
 		this.field = new GameField(width, height);
 		field.doSpawn(new Wall(0, 0, 0, width, 1));
 		field.doSpawn(new Wall(0, 0, height - 1, width, 1));

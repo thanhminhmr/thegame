@@ -5,10 +5,6 @@ import mrmathami.thegame.field.GameField;
 
 import javax.annotation.Nonnull;
 
-/**
- * Marker interface.
- * Mark objects that can be removed from the field one created.
- */
 public interface DestroyableEntity extends GameEntity {
 	void doDestroy();
 

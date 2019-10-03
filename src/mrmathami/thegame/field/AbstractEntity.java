@@ -1,5 +1,8 @@
 package mrmathami.thegame.field;
 
+/**
+ * Abstract class for game entity.
+ */
 public abstract class AbstractEntity implements GameEntity {
 	private final int createdTick;
 	private float posX;
@@ -25,6 +28,10 @@ public abstract class AbstractEntity implements GameEntity {
 		return posX;
 	}
 
+	/**
+	 * Set entity field pos x. Should only be called in doUpdate of UpdatableEntity
+	 * @param posX field pos x
+	 */
 	protected final void setPosX(float posX) {
 		this.posX = posX;
 	}
@@ -34,6 +41,10 @@ public abstract class AbstractEntity implements GameEntity {
 		return posY;
 	}
 
+	/**
+	 * Set entity field pos y. Should only be called in doUpdate of UpdatableEntity
+	 * @param posY field pos y
+	 */
 	protected final void setPosY(float posY) {
 		this.posY = posY;
 	}
@@ -43,6 +54,10 @@ public abstract class AbstractEntity implements GameEntity {
 		return width;
 	}
 
+	/**
+	 * Set entity field width. Should only be called in doUpdate of UpdatableEntity
+	 * @param width field width
+	 */
 	protected final void setWidth(float width) {
 		this.width = width;
 	}
@@ -52,6 +67,10 @@ public abstract class AbstractEntity implements GameEntity {
 		return height;
 	}
 
+	/**
+	 * Set entity field height. Should only be called in doUpdate of UpdatableEntity
+	 * @param height field height
+	 */
 	protected final void setHeight(float height) {
 		this.height = height;
 	}
