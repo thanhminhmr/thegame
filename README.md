@@ -1,4 +1,4 @@
-# thegame
+# OOP_Assignment
 OOP Assignment - Game Tower Defense 
 
 Đồng Minh Cường - 18020255
