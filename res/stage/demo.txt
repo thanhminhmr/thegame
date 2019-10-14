@@ -1,0 +1,101 @@
+30 17 83
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 1
+1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+1 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 1
+1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+Target 1 13 1 3 20
+NormalSpawner 1 1 3 3 45 90 20
+SmallerSpawner 1 1 3 3 30 300 30
+TankerSpawner 1 1 3 3 60 600 5
+BossSpawner 1 1 3 3 0 900 1
+NormalTower 1 0
+NormalTower 2 0
+NormalTower 3 0
+NormalTower 4 0
+NormalTower 5 0
+NormalTower 6 0
+NormalTower 7 0
+NormalTower 8 0
+NormalTower 9 0
+NormalTower 10 0
+NormalTower 11 0
+NormalTower 12 0
+NormalTower 13 0
+NormalTower 14 0
+NormalTower 15 0
+NormalTower 16 0
+NormalTower 17 0
+NormalTower 18 0
+NormalTower 19 0
+NormalTower 20 0
+NormalTower 21 0
+NormalTower 22 0
+NormalTower 23 0
+NormalTower 24 0
+NormalTower 25 0
+NormalTower 26 0
+NormalTower 27 0
+NormalTower 28 0
+MachineGunTower 1 4
+MachineGunTower 2 4
+MachineGunTower 3 4
+MachineGunTower 4 4
+MachineGunTower 5 4
+MachineGunTower 6 4
+MachineGunTower 7 4
+MachineGunTower 8 4
+MachineGunTower 9 4
+MachineGunTower 10 4
+MachineGunTower 11 4
+MachineGunTower 12 4
+MachineGunTower 13 4
+MachineGunTower 14 4
+MachineGunTower 15 4
+MachineGunTower 16 4
+MachineGunTower 17 4
+MachineGunTower 18 4
+MachineGunTower 19 4
+MachineGunTower 20 4
+MachineGunTower 21 4
+MachineGunTower 22 4
+MachineGunTower 23 4
+MachineGunTower 24 4
+MachineGunTower 25 4
+SniperTower 4 8
+SniperTower 5 8
+SniperTower 6 8
+SniperTower 7 8
+SniperTower 8 8
+SniperTower 9 8
+SniperTower 10 8
+SniperTower 11 8
+SniperTower 12 8
+SniperTower 13 8
+SniperTower 14 8
+SniperTower 15 8
+SniperTower 16 8
+SniperTower 17 8
+SniperTower 18 8
+SniperTower 19 8
+SniperTower 20 8
+SniperTower 21 8
+SniperTower 22 8
+SniperTower 23 8
+SniperTower 24 8
+SniperTower 25 8
+SniperTower 26 8
+SniperTower 27 8
+SniperTower 28 8

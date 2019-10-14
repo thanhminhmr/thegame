@@ -3,53 +3,78 @@ package mrmathami.thegame.drawer;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import mrmathami.thegame.Config;
-import mrmathami.thegame.drawer.entity.PlayerDrawer;
-import mrmathami.thegame.drawer.tile.BombDrawer;
-import mrmathami.thegame.drawer.tile.FlareDrawer;
-import mrmathami.thegame.drawer.tile.WallDrawer;
-import mrmathami.thegame.field.GameEntities;
-import mrmathami.thegame.field.GameEntity;
-import mrmathami.thegame.field.GameField;
-import mrmathami.thegame.field.entity.Player;
-import mrmathami.thegame.field.tile.Bomb;
-import mrmathami.thegame.field.tile.Flare;
-import mrmathami.thegame.field.tile.Wall;
+import mrmathami.thegame.GameEntities;
+import mrmathami.thegame.GameField;
+import mrmathami.thegame.entity.GameEntity;
+import mrmathami.thegame.entity.bullet.NormalBullet;
+import mrmathami.thegame.entity.enemy.NormalEnemy;
+import mrmathami.thegame.entity.tile.Mountain;
+import mrmathami.thegame.entity.tile.Road;
+import mrmathami.thegame.entity.tile.Target;
+import mrmathami.thegame.entity.tile.spawner.NormalSpawner;
+import mrmathami.thegame.entity.tile.tower.NormalTower;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public final class GameDrawer {
 	/**
-	 * TODO:
-	 * This is a list contains Entity type that can be drawn on screen.
+	 * TODO: This is a list contains Entity type that can be drawn on screen.
 	 * Remember to add your own entity class here if it can be drawn.
 	 */
 	@Nonnull private static final List<Class<?>> ENTITY_DRAWING_ORDER = List.of(
-			Bomb.class,
-			Player.class,
-			Flare.class,
-			Wall.class
+			Road.class,
+			Mountain.class,
+			NormalTower.class,
+//			SniperTower.class,
+//			MachineGunTower.class,
+			NormalBullet.class,
+//			MachineGunBullet.class,
+//			SniperBullet.class,
+			NormalEnemy.class,
+//			SmallerEnemy.class,
+//			TankerEnemy.class,
+//			BossEnemy.class,
+			NormalSpawner.class,
+//			SmallerSpawner.class,
+//			TankerSpawner.class,
+//			BossSpawner.class,
+			Target.class
 	);
 	/**
 	 * TODO:
 	 * This is a map between Entity type and its drawer.
 	 * Remember to add your entity drawer here.
 	 */
-	@Nonnull private static final Map<Class<?>, EntityDrawer> ENTITY_DRAWER_MAP = Map.of(
-			Bomb.class, new BombDrawer(),
-			Player.class, new PlayerDrawer(),
-			Flare.class, new FlareDrawer(),
-			Wall.class, new WallDrawer()
-	);
+	@Nonnull private static final Map<Class<? extends GameEntity>, EntityDrawer> ENTITY_DRAWER_MAP = new HashMap<>(Map.ofEntries(
+			Map.entry(Road.class, new RoadDrawer()),
+			Map.entry(Mountain.class, new MountainDrawer()),
+			Map.entry(NormalTower.class, new NormalTowerDrawer()),
+//			Map.entry(SniperTower.class, new SniperTowerDrawer()),
+//			Map.entry(MachineGunTower.class, new MachineGunTowerDrawer()),
+			Map.entry(NormalBullet.class, new NormalBulletDrawer()),
+//			Map.entry(MachineGunBullet.class, new MachineGunBulletDrawer()),
+//			Map.entry(SniperBullet.class, new SniperBulletDrawer()),
+			Map.entry(NormalEnemy.class, new NormalEnemyDrawer()),
+//			Map.entry(SmallerEnemy.class, new SmallerEnemyDrawer()),
+//			Map.entry(TankerEnemy.class, new TankerEnemyDrawer()),
+//			Map.entry(BossEnemy.class, new BossEnemyDrawer()),
+			Map.entry(NormalSpawner.class, new SpawnerDrawer()),
+//			Map.entry(SmallerSpawner.class, new SpawnerDrawer()),
+//			Map.entry(TankerSpawner.class, new SpawnerDrawer()),
+//			Map.entry(BossSpawner.class, new SpawnerDrawer()),
+			Map.entry(Target.class, new TargetDrawer())
+	));
 
 	@Nonnull private final GraphicsContext graphicsContext;
 	@Nonnull private GameField gameField;
-	private transient float fieldStartPosX = Float.NaN;
-	private transient float fieldStartPosY = Float.NaN;
-	private transient float fieldZoom = Float.NaN;
+	private transient double fieldStartPosX = Float.NaN;
+	private transient double fieldStartPosY = Float.NaN;
+	private transient double fieldZoom = Float.NaN;
 
 	public GameDrawer(@Nonnull GraphicsContext graphicsContext, @Nonnull GameField gameField) {
 		this.graphicsContext = graphicsContext;
@@ -70,13 +95,13 @@ public final class GameDrawer {
 				ENTITY_DRAWING_ORDER.indexOf(entityB.getClass())
 		);
 		if (compareOrder != 0) return compareOrder;
-		final int comparePosX = Float.compare(entityA.getPosX(), entityB.getPosX());
+		final int comparePosX = Double.compare(entityA.getPosX(), entityB.getPosX());
 		if (comparePosX != 0) return comparePosX;
-		final int comparePosY = Float.compare(entityA.getPosY(), entityB.getPosY());
+		final int comparePosY = Double.compare(entityA.getPosY(), entityB.getPosY());
 		if (comparePosY != 0) return comparePosY;
-		final int compareWidth = Float.compare(entityA.getWidth(), entityB.getWidth());
+		final int compareWidth = Double.compare(entityA.getWidth(), entityB.getWidth());
 		if (compareWidth != 0) return compareWidth;
-		return Float.compare(entityA.getHeight(), entityB.getHeight());
+		return Double.compare(entityA.getHeight(), entityB.getHeight());
 	}
 
 	/**
@@ -88,15 +113,15 @@ public final class GameDrawer {
 		return ENTITY_DRAWER_MAP.get(entity.getClass());
 	}
 
-	public final float getFieldStartPosX() {
+	public final double getFieldStartPosX() {
 		return fieldStartPosX;
 	}
 
-	public final float getFieldStartPosY() {
+	public final double getFieldStartPosY() {
 		return fieldStartPosY;
 	}
 
-	public final float getFieldZoom() {
+	public final double getFieldZoom() {
 		return fieldZoom;
 	}
 
@@ -111,7 +136,7 @@ public final class GameDrawer {
 	 * @param fieldStartPosY pos y
 	 * @param fieldZoom      zoom
 	 */
-	public final void setFieldViewRegion(float fieldStartPosX, float fieldStartPosY, float fieldZoom) {
+	public final void setFieldViewRegion(double fieldStartPosX, double fieldStartPosY, double fieldZoom) {
 		this.fieldStartPosX = fieldStartPosX;
 		this.fieldStartPosY = fieldStartPosY;
 		this.fieldZoom = fieldZoom;
@@ -122,16 +147,16 @@ public final class GameDrawer {
 	 */
 	public final void render() {
 		final GameField gameField = this.gameField;
-		final float fieldStartPosX = this.fieldStartPosX;
-		final float fieldStartPosY = this.fieldStartPosY;
-		final float fieldZoom = this.fieldZoom;
+		final double fieldStartPosX = this.fieldStartPosX;
+		final double fieldStartPosY = this.fieldStartPosY;
+		final double fieldZoom = this.fieldZoom;
 
 		final List<GameEntity> entities = new ArrayList<>(GameEntities.getOverlappedEntities(gameField.getEntities(),
 				fieldStartPosX, fieldStartPosY, Config.SCREEN_WIDTH / fieldZoom, Config.SCREEN_HEIGHT / fieldZoom));
 		entities.sort(GameDrawer::entityDrawingOrderComparator);
 
 		graphicsContext.setFill(Color.BLACK);
-		graphicsContext.fillRect(0.0f, 0.0f, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
+		graphicsContext.fillRect(0.0, 0.0, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
 
 		GameEntity lastEntity = null;
 		for (final GameEntity entity : entities) {
@@ -150,19 +175,19 @@ public final class GameDrawer {
 		}
 	}
 
-	public final float screenToFieldPosX(float screenPosX) {
+	public final double screenToFieldPosX(double screenPosX) {
 		return screenPosX * fieldZoom + fieldStartPosX;
 	}
 
-	public final float screenToFieldPosY(float screenPosY) {
+	public final double screenToFieldPosY(double screenPosY) {
 		return screenPosY * fieldZoom + fieldStartPosY;
 	}
 
-	public final float fieldToScreenPosX(float fieldPosX) {
+	public final double fieldToScreenPosX(double fieldPosX) {
 		return (fieldPosX - fieldStartPosX) / fieldZoom;
 	}
 
-	public final float fieldToScreenPosY(float fieldPosY) {
+	public final double fieldToScreenPosY(double fieldPosY) {
 		return (fieldPosY - fieldStartPosY) / fieldZoom;
 	}
 }

@@ -4,11 +4,8 @@ module towerdefense {
 	opens mrmathami.thegame;
 	exports mrmathami.thegame;
 	exports mrmathami.thegame.drawer;
-	exports mrmathami.thegame.drawer.tile;
-	exports mrmathami.thegame.field;
-	exports mrmathami.thegame.field.characteristic;
-	exports mrmathami.thegame.field.entity;
-	exports mrmathami.thegame.field.tile;
+	exports mrmathami.thegame.entity;
+	exports mrmathami.thegame.entity.tile;
 
 	requires javafx.base;
 	requires javafx.graphics;

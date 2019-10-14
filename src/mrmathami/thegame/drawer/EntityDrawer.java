@@ -1,10 +1,10 @@
 package mrmathami.thegame.drawer;
 
 import javafx.scene.canvas.GraphicsContext;
-import mrmathami.thegame.field.GameEntity;
+import mrmathami.thegame.entity.GameEntity;
 
 import javax.annotation.Nonnull;
 
 public interface EntityDrawer {
-	void draw(int tickCount, @Nonnull GraphicsContext graphicsContext, @Nonnull GameEntity entity, float screenPosX, float screenPosY, float screenWidth, float screenHeight, float zoom);
+	void draw(long tickCount, @Nonnull GraphicsContext graphicsContext, @Nonnull GameEntity entity, double screenPosX, double screenPosY, double screenWidth, double screenHeight, double zoom);
 }
