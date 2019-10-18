@@ -3,8 +3,7 @@ package mrmathami.thegame;
 import mrmathami.thegame.entity.EffectEntity;
 import mrmathami.thegame.entity.GameEntity;
 import mrmathami.thegame.entity.LivingEntity;
-import mrmathami.thegame.entity.bullet.NormalBullet;
-import mrmathami.thegame.entity.bullet.SniperBullet;
+import mrmathami.thegame.entity.bullet.*;
 import mrmathami.thegame.entity.enemy.NormalEnemy;
 import mrmathami.thegame.entity.tile.Mountain;
 import mrmathami.thegame.entity.tile.Target;
@@ -34,7 +33,7 @@ public final class GameEntities {
 	private static final Set<Pair<Class<? extends EffectEntity>, Class<? extends LivingEntity>>> EFFECT_LIVING_SET
 			= new HashSet<>(Set.of(
 			Pair.immutableOf(NormalBullet.class, NormalEnemy.class),
-//			Pair.immutableOf(MachineGunBullet.class, NormalEnemy.class),
+			Pair.immutableOf(MachineGunBullet.class, NormalEnemy.class),
 			Pair.immutableOf(SniperBullet.class, NormalEnemy.class),
 //			Pair.immutableOf(NormalBullet.class, SmallerEnemy.class),
 //			Pair.immutableOf(MachineGunBullet.class, SmallerEnemy.class),

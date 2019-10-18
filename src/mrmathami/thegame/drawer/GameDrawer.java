@@ -6,6 +6,7 @@ import mrmathami.thegame.Config;
 import mrmathami.thegame.GameEntities;
 import mrmathami.thegame.GameField;
 import mrmathami.thegame.entity.GameEntity;
+import mrmathami.thegame.entity.bullet.MachineGunBullet;
 import mrmathami.thegame.entity.bullet.NormalBullet;
 import mrmathami.thegame.entity.bullet.SniperBullet;
 import mrmathami.thegame.entity.enemy.NormalEnemy;
@@ -13,6 +14,7 @@ import mrmathami.thegame.entity.tile.Mountain;
 import mrmathami.thegame.entity.tile.Road;
 import mrmathami.thegame.entity.tile.Target;
 import mrmathami.thegame.entity.tile.spawner.NormalSpawner;
+import mrmathami.thegame.entity.tile.tower.MachineGunTower;
 import mrmathami.thegame.entity.tile.tower.NormalTower;
 import mrmathami.thegame.entity.tile.tower.SniperTower;
 
@@ -33,9 +35,9 @@ public final class GameDrawer {
 			Mountain.class,
 			NormalTower.class,
 			SniperTower.class,
-//			MachineGunTower.class,
+			MachineGunTower.class,
 			NormalBullet.class,
-//			MachineGunBullet.class,
+			MachineGunBullet.class,
 			SniperBullet.class,
 			NormalEnemy.class,
 //			SmallerEnemy.class,
