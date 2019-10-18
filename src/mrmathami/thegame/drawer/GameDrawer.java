@@ -6,17 +6,13 @@ import mrmathami.thegame.Config;
 import mrmathami.thegame.GameEntities;
 import mrmathami.thegame.GameField;
 import mrmathami.thegame.entity.GameEntity;
-import mrmathami.thegame.entity.bullet.MachineGunBullet;
-import mrmathami.thegame.entity.bullet.NormalBullet;
-import mrmathami.thegame.entity.bullet.SniperBullet;
-import mrmathami.thegame.entity.enemy.NormalEnemy;
+import mrmathami.thegame.entity.bullet.*;
+import mrmathami.thegame.entity.enemy.*;
 import mrmathami.thegame.entity.tile.Mountain;
 import mrmathami.thegame.entity.tile.Road;
 import mrmathami.thegame.entity.tile.Target;
-import mrmathami.thegame.entity.tile.spawner.NormalSpawner;
-import mrmathami.thegame.entity.tile.tower.MachineGunTower;
-import mrmathami.thegame.entity.tile.tower.NormalTower;
-import mrmathami.thegame.entity.tile.tower.SniperTower;
+import mrmathami.thegame.entity.tile.spawner.*;
+import mrmathami.thegame.entity.tile.tower.*;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -27,8 +23,9 @@ import java.util.Map;
 
 public final class GameDrawer {
 	/**
-	 * TODO: This is a list contains Entity type that can be drawn on screen.
+	 * TODO: This is a list contains Entity type that can be drawn on screen.(Cuong: done !!)
 	 * Remember to add your own entity class here if it can be drawn.
+     *
 	 */
 	@Nonnull private static final List<Class<?>> ENTITY_DRAWING_ORDER = List.of(
 			Road.class,
@@ -40,17 +37,17 @@ public final class GameDrawer {
 			MachineGunBullet.class,
 			SniperBullet.class,
 			NormalEnemy.class,
-//			SmallerEnemy.class,
-//			TankerEnemy.class,
-//			BossEnemy.class,
+			SmallerEnemy.class,
+			TankerEnemy.class,
+			BossEnemy.class,
 			NormalSpawner.class,
-//			SmallerSpawner.class,
-//			TankerSpawner.class,
-//			BossSpawner.class,
+			SmallerSpawner.class,
+			TankerSpawner.class,
+			BossSpawner.class,
 			Target.class
 	);
 	/**
-	 * TODO:
+	 * TODO: (Cuong: done !!)
 	 * This is a map between Entity type and its drawer.
 	 * Remember to add your entity drawer here.
 	 */
@@ -59,18 +56,18 @@ public final class GameDrawer {
 			Map.entry(Mountain.class, new MountainDrawer()),
 			Map.entry(NormalTower.class, new NormalTowerDrawer()),
 			Map.entry(SniperTower.class, new SniperTowerDrawer()),
-//			Map.entry(MachineGunTower.class, new MachineGunTowerDrawer()),
+			Map.entry(MachineGunTower.class, new MachineGunTowerDrawer()),
 			Map.entry(NormalBullet.class, new NormalBulletDrawer()),
-//			Map.entry(MachineGunBullet.class, new MachineGunBulletDrawer()),
+			Map.entry(MachineGunBullet.class, new MachineGunBulletDrawer()),
 			Map.entry(SniperBullet.class, new SniperBulletDrawer()),
 			Map.entry(NormalEnemy.class, new NormalEnemyDrawer()),
-//			Map.entry(SmallerEnemy.class, new SmallerEnemyDrawer()),
-//			Map.entry(TankerEnemy.class, new TankerEnemyDrawer()),
-//			Map.entry(BossEnemy.class, new BossEnemyDrawer()),
+			Map.entry(SmallerEnemy.class, new SmallerEnemyDrawer()),
+			Map.entry(TankerEnemy.class, new TankerEnemyDrawer()),
+			Map.entry(BossEnemy.class, new BossEnemyDrawer()),
 			Map.entry(NormalSpawner.class, new SpawnerDrawer()),
-//			Map.entry(SmallerSpawner.class, new SpawnerDrawer()),
-//			Map.entry(TankerSpawner.class, new SpawnerDrawer()),
-//			Map.entry(BossSpawner.class, new SpawnerDrawer()),
+			Map.entry(SmallerSpawner.class, new SpawnerDrawer()),
+			Map.entry(TankerSpawner.class, new SpawnerDrawer()),
+			Map.entry(BossSpawner.class, new SpawnerDrawer()),
 			Map.entry(Target.class, new TargetDrawer())
 	));
 
