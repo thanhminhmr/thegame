@@ -7,12 +7,14 @@ import mrmathami.thegame.GameEntities;
 import mrmathami.thegame.GameField;
 import mrmathami.thegame.entity.GameEntity;
 import mrmathami.thegame.entity.bullet.NormalBullet;
+import mrmathami.thegame.entity.bullet.SniperBullet;
 import mrmathami.thegame.entity.enemy.NormalEnemy;
 import mrmathami.thegame.entity.tile.Mountain;
 import mrmathami.thegame.entity.tile.Road;
 import mrmathami.thegame.entity.tile.Target;
 import mrmathami.thegame.entity.tile.spawner.NormalSpawner;
 import mrmathami.thegame.entity.tile.tower.NormalTower;
+import mrmathami.thegame.entity.tile.tower.SniperTower;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -30,11 +32,11 @@ public final class GameDrawer {
 			Road.class,
 			Mountain.class,
 			NormalTower.class,
-//			SniperTower.class,
+			SniperTower.class,
 //			MachineGunTower.class,
 			NormalBullet.class,
 //			MachineGunBullet.class,
-//			SniperBullet.class,
+			SniperBullet.class,
 			NormalEnemy.class,
 //			SmallerEnemy.class,
 //			TankerEnemy.class,
@@ -54,11 +56,11 @@ public final class GameDrawer {
 			Map.entry(Road.class, new RoadDrawer()),
 			Map.entry(Mountain.class, new MountainDrawer()),
 			Map.entry(NormalTower.class, new NormalTowerDrawer()),
-//			Map.entry(SniperTower.class, new SniperTowerDrawer()),
+			Map.entry(SniperTower.class, new SniperTowerDrawer()),
 //			Map.entry(MachineGunTower.class, new MachineGunTowerDrawer()),
 			Map.entry(NormalBullet.class, new NormalBulletDrawer()),
 //			Map.entry(MachineGunBullet.class, new MachineGunBulletDrawer()),
-//			Map.entry(SniperBullet.class, new SniperBulletDrawer()),
+			Map.entry(SniperBullet.class, new SniperBulletDrawer()),
 			Map.entry(NormalEnemy.class, new NormalEnemyDrawer()),
 //			Map.entry(SmallerEnemy.class, new SmallerEnemyDrawer()),
 //			Map.entry(TankerEnemy.class, new TankerEnemyDrawer()),

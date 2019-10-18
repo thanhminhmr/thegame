@@ -4,6 +4,7 @@ import mrmathami.thegame.entity.EffectEntity;
 import mrmathami.thegame.entity.GameEntity;
 import mrmathami.thegame.entity.LivingEntity;
 import mrmathami.thegame.entity.bullet.NormalBullet;
+import mrmathami.thegame.entity.bullet.SniperBullet;
 import mrmathami.thegame.entity.enemy.NormalEnemy;
 import mrmathami.thegame.entity.tile.Mountain;
 import mrmathami.thegame.entity.tile.Target;
@@ -34,7 +35,7 @@ public final class GameEntities {
 			= new HashSet<>(Set.of(
 			Pair.immutableOf(NormalBullet.class, NormalEnemy.class),
 //			Pair.immutableOf(MachineGunBullet.class, NormalEnemy.class),
-//			Pair.immutableOf(SniperBullet.class, NormalEnemy.class),
+			Pair.immutableOf(SniperBullet.class, NormalEnemy.class),
 //			Pair.immutableOf(NormalBullet.class, SmallerEnemy.class),
 //			Pair.immutableOf(MachineGunBullet.class, SmallerEnemy.class),
 //			Pair.immutableOf(SniperBullet.class, SmallerEnemy.class),

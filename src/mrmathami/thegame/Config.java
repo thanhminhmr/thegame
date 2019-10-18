@@ -4,7 +4,7 @@ public final class Config {
 	/**
 	 * Game name. Change it if you want.
 	 */
-	public static final String GAME_NAME = "The Game";
+	public static final String GAME_NAME = "Tower Defense";
 	/**
 	 * Ticks per second
 	 */
