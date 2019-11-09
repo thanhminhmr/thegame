@@ -7,7 +7,7 @@ import javax.annotation.Nonnull;
 
 public class SniperTower extends AbstractTower<SniperBullet>{
 
-    protected SniperTower(long createdTick, long posX, long posY) {
+    public SniperTower(long createdTick, long posX, long posY) {
         super(createdTick, posX, posY, Config.SNIPER_TOWER_RANGE, Config.SNIPER_TOWER_SPEED);
     }
 

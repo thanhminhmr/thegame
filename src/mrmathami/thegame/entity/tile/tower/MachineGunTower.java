@@ -7,7 +7,7 @@ import javax.annotation.Nonnull;
 
 public class MachineGunTower extends AbstractTower<MachineGunBullet> {
 
-    protected MachineGunTower(long createdTick, long posX, long posY) {
+    public MachineGunTower(long createdTick, long posX, long posY) {
         super(createdTick, posX, posY, Config.MACHINE_GUN_TOWER_RANGE, Config.MACHINE_GUN_TOWER_SPEED);
     }
 
