@@ -176,11 +176,11 @@ public final class GameDrawer {
 	}
 
 	public final double screenToFieldPosX(double screenPosX) {
-		return screenPosX * fieldZoom + fieldStartPosX;
+		return screenPosX / fieldZoom + fieldStartPosX;
 	}
 
 	public final double screenToFieldPosY(double screenPosY) {
-		return screenPosY * fieldZoom + fieldStartPosY;
+		return screenPosY / fieldZoom + fieldStartPosY;
 	}
 
 	public final double fieldToScreenPosX(double fieldPosX) {

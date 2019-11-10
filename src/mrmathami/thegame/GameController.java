@@ -9,12 +9,16 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.WindowEvent;
 import mrmathami.thegame.drawer.GameDrawer;
+import mrmathami.thegame.entity.GameEntity;
+import mrmathami.thegame.entity.tile.Mountain;
+import mrmathami.thegame.entity.tile.tower.NormalTower;
 import mrmathami.utilities.ThreadFactoryBuilder;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 /**
  * A game controller. Everything about the game should be managed in here.
@@ -35,6 +39,12 @@ public final class GameController extends AnimationTimer {
 	 * The screen to draw on. Just don't touch me. Google me if you are curious.
 	 */
 	private final GraphicsContext graphicsContext;
+
+	private Consumer<GameField> doPerTick;
+
+	public void setDoPerTick(Consumer<GameField> doPerTick) {
+		this.doPerTick = doPerTick;
+	}
 
 	/**
 	 * Game field. Contain everything in the current game field.
@@ -107,6 +117,7 @@ public final class GameController extends AnimationTimer {
 		final long currentTick = tick;
 		final long startNs = System.nanoTime();
 
+		if (doPerTick != null) doPerTick.accept(this.field);
 		// do a tick, as fast as possible
 		field.tick();
 
@@ -153,6 +164,13 @@ public final class GameController extends AnimationTimer {
 		System.exit(0);
 	}
 
+
+	private Config.KEY_STATUS keyStatus = Config.KEY_STATUS.NONE;
+
+	public void setKeyStatus(Config.KEY_STATUS keyStatus) {
+		this.keyStatus = keyStatus;
+	}
+
 	/**
 	 * Key down handler.
 	 *
@@ -197,8 +215,22 @@ public final class GameController extends AnimationTimer {
 	final void mouseDownHandler(MouseEvent mouseEvent) {
 //		mouseEvent.getButton(); // which mouse button?
 //		// Screen coordinate. Remember to convert to field coordinate
-//		drawer.screenToFieldPosX(mouseEvent.getX());
-//		drawer.screenToFieldPosY(mouseEvent.getY());
+		int x = (int) drawer.screenToFieldPosX(mouseEvent.getX());
+		int y = (int) drawer.screenToFieldPosY(mouseEvent.getY());
+		var a = GameEntities.getOverlappedEntities(field.getEntities(), x, y, 1, 1);
+		switch (keyStatus) {
+			case NONE:
+			case SELL:
+			case UPGRADE:
+				return;
+			case NORMAL_TOWER:
+				if (field.getCredit() < 10) return;
+				for (GameEntity gameEntity : a) {
+					if (!gameEntity.getClass().equals(Mountain.class)) return;
+				}
+				field.doSpawn(new NormalTower(tick, x, y));
+				field.getReward(-10);
+		}
 	}
 
 	/**

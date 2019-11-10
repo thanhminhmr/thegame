@@ -256,4 +256,8 @@ public final class GameEntities {
 			if (entityClass.isInstance(entity)) outputEntities.add(entityClass.cast(entity));
 		return outputEntities;
 	}
+
+	public static double getMidX(GameEntity entity) {return entity.getPosX() + entity.getWidth() / 2;}
+
+	public static double getMidY(GameEntity entity) {return  entity.getPosY() + entity.getHeight() / 2;}
 }

@@ -8,7 +8,6 @@ import mrmathami.thegame.entity.enemy.AbstractEnemy;
 import mrmathami.thegame.entity.tile.AbstractTile;
 
 import javax.annotation.Nonnull;
-import java.util.Collection;
 
 public abstract class AbstractTower<E extends AbstractBullet> extends AbstractTile implements UpdatableEntity {
 	private final double range;
@@ -27,10 +26,21 @@ public abstract class AbstractTower<E extends AbstractBullet> extends AbstractTi
 	public final void onUpdate(@Nonnull GameField field) {
 		this.tickDown -= 1;
 		if (tickDown <= 0) {
-			// TODO: Find a target and spawn a bullet to that direction.
+			// TODO: Find a target and spawn a bullet to that direction ... done!
 			// Use GameEntities.getFilteredOverlappedEntities to find target in range
 			// Remember to set this.tickDown back to this.speed after shooting something.
 			// this.tickDown = speed;
+			double x = GameEntities.getMidX(this);
+			double y = GameEntities.getMidY(this);
+			for (AbstractEnemy enemy : GameEntities.entitiesFilter(field.getEntities(), AbstractEnemy.class)) {
+				double dx = GameEntities.getMidX(enemy) - x;
+				double dy = GameEntities.getMidY(enemy) - y;
+				if (dx * dx + dy * dy < range * range) {
+					field.doSpawn(doSpawn(field.getTickCount(), x, y, dx, dy));
+					tickDown = speed;
+					break;
+				}
+			}
 		}
 	}
 

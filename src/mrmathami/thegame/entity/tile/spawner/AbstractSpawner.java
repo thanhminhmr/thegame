@@ -28,12 +28,17 @@ public abstract class AbstractSpawner<E extends AbstractEnemy> extends AbstractT
 	public final void onUpdate(@Nonnull GameField field) {
 		this.tickDown -= 1;
 		if (tickDown <= 0 && numOfSpawn > 0) {
-			// TODO: get a random spot inside spawn range
+			// TODO: get a random spot inside spawn range ... done!
 			// Check if the spot is valid and then spawn an enemy
 			// Remember to set this.tickDown back to this.spawnInterval
 			// and decrease this.numOfSpawn once you spawn an enemy.
-			// this.tickDown = spawnInterval;
-			// this.numOfSpawn -= 1;
+			double x = Math.random() * (getWidth() - spawningSize) + getPosX();
+			double y = Math.random() * (getHeight() - spawningSize) + getPosY();
+			if (GameEntities.getFilteredOverlappedEntities(field.getEntities(), spawningClass, x, y, spawningSize, spawningSize).isEmpty()) {
+				field.doSpawn(doSpawn(0, x, y));
+				this.tickDown = spawnInterval;
+				this.numOfSpawn -= 1;
+			}
 		}
 	}
 

@@ -75,12 +75,14 @@ public abstract class AbstractEnemy extends AbstractEntity implements UpdatableE
 
 	@Override
 	public final void onDestroy(@Nonnull GameField field) {
-		// TODO: reward
+		// TODO: reward ... Done!
+		field.getReward(reward);
 	}
 
 	@Override
 	public final boolean onEffect(@Nonnull GameField field, @Nonnull LivingEntity livingEntity) {
-		// TODO: harm the target
+		// TODO: harm the target ... Done!
+		livingEntity.doEffect(-health);
 		this.health = Long.MIN_VALUE;
 		return false;
 	}
@@ -103,5 +105,9 @@ public abstract class AbstractEnemy extends AbstractEntity implements UpdatableE
 	@Override
 	public final boolean isDestroyed() {
 		return health <= 0L;
+	}
+
+	public double getSpeed() {
+		return speed;
 	}
 }

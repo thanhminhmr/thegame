@@ -5,6 +5,7 @@ import mrmathami.thegame.entity.*;
 
 import javax.annotation.Nonnull;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Game Field. Created from GameMap for each new stage. Represent the currently playing game.
@@ -13,6 +14,16 @@ public final class GameField {
 	@Nonnull private final Set<GameEntity> entities = new LinkedHashSet<>(Config._TILE_MAP_COUNT);
 	@Nonnull private final Collection<GameEntity> unmodifiableEntities = Collections.unmodifiableCollection(entities);
 	@Nonnull private final List<GameEntity> spawnEntities = new ArrayList<>(Config._TILE_MAP_COUNT);
+
+	private final AtomicLong credit;
+
+	public long getCredit() {
+		return credit.longValue();
+	}
+
+	public void getReward(long reward) {
+		credit.addAndGet(reward);
+	}
 
 	/**
 	 * Field width
@@ -32,6 +43,7 @@ public final class GameField {
 		this.height = gameStage.getHeight();
 		this.tickCount = 0;
 		entities.addAll(gameStage.getEntities());
+		credit = new AtomicLong(Config.START_MONEY);
 	}
 
 	public final double getWidth() {

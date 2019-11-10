@@ -1,5 +1,7 @@
 package mrmathami.thegame;
 
+import javafx.scene.image.Image;
+
 public final class Config {
 	/**
 	 * Game name. Change it if you want.
@@ -29,7 +31,7 @@ public final class Config {
 	 * Num of tiles the screen can display if fieldZoom is TILE_SIZE,
 	 * in other words, the texture will be display as it without scaling.
 	 */
-	public static final long TILE_VERTICAL = 20;
+	public static final long TILE_VERTICAL = 17;
 	/**
 	 * An arbitrary number just to make some code run a little faster.
 	 * Do not touch.
@@ -100,6 +102,17 @@ public final class Config {
 	public static final long BOSS_ENEMY_REWARD = 10;
 	//endregion
 
+	public static final long START_MONEY = 100;
+	public enum KEY_STATUS {
+		NONE, NORMAL_TOWER, SELL, UPGRADE;
+	}
+
+	//image
+	static final Image GAME_TITLE = new Image(Config.class.getResourceAsStream("/game_title.png"));
+	static final Image START_SCREEN_BACKGROUND = new Image(Config.class.getResourceAsStream("/wait_bg.jpg"));
+    static final Image NEW_GAME = new Image(Config.class.getResourceAsStream("/new_game.png"));
+    static final Image CONTINUE = new Image(Config.class.getResourceAsStream("/contiune.png"));
+	public static Image CURSOR = new Image(Config.class.getResourceAsStream("/graphic/BlackTileBoundaryGraphic.png"));
 	private Config() {
 	}
 
