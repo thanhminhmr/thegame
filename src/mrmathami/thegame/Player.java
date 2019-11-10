@@ -7,7 +7,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TitledPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -36,12 +35,23 @@ class Player {
         });
 
         Button normalTower = new Button("Normal Tower");
+        normalTower.setCursor(new ImageCursor(Config.NORMAL_TOWER_IMAGE));
         normalTower.setOnAction(e -> {
-            gameController.setKeyStatus(Config.KEY_STATUS.NORMAL_TOWER);
-            canvas.setCursor(new ImageCursor(Config.CURSOR));
+            gameController.setKeyStatus(Config.STATUS.NORMAL_TOWER);
+            canvas.getParent().setCursor(new ImageCursor(Config.NORMAL_TOWER_IMAGE));
         });
 
-        TitledPane titledPane = new TitledPane("Shop", new HBox(normalTower));
+        Button sniperTower = new Button("Sniper Tower");
+        sniperTower.setOnAction(e -> {
+            gameController.setKeyStatus(Config.STATUS.SNIPER_TOWER);
+        });
+
+        Button machineGunTower = new Button("Machine Gun Tower");
+        machineGunTower.setOnAction(e -> {
+            gameController.setKeyStatus(Config.STATUS.MACHINE_GUN_TOWER);
+        });
+
+        TitledPane titledPane = new TitledPane("Shop", new VBox(normalTower, sniperTower, machineGunTower));
         VBox vBox = new VBox(money, titledPane);
         vBox.setFocusTraversable(true);
 

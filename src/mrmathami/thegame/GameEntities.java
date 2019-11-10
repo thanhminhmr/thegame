@@ -3,8 +3,13 @@ package mrmathami.thegame;
 import mrmathami.thegame.entity.EffectEntity;
 import mrmathami.thegame.entity.GameEntity;
 import mrmathami.thegame.entity.LivingEntity;
+import mrmathami.thegame.entity.bullet.MachineGunBullet;
 import mrmathami.thegame.entity.bullet.NormalBullet;
+import mrmathami.thegame.entity.bullet.SniperBullet;
+import mrmathami.thegame.entity.enemy.BossEnemy;
 import mrmathami.thegame.entity.enemy.NormalEnemy;
+import mrmathami.thegame.entity.enemy.SmallerEnemy;
+import mrmathami.thegame.entity.enemy.TankerEnemy;
 import mrmathami.thegame.entity.tile.Mountain;
 import mrmathami.thegame.entity.tile.Target;
 import mrmathami.utilities.Pair;
@@ -21,33 +26,33 @@ public final class GameEntities {
 	private static final Set<UnorderedPair<Class<? extends GameEntity>, Class<? extends GameEntity>>> COLLISION_PAIR_SET
 			= new HashSet<>(Set.of(
 			UnorderedPair.immutableOf(Mountain.class, NormalEnemy.class),
-//			UnorderedPair.immutableOf(Mountain.class, SmallerEnemy.class),
-//			UnorderedPair.immutableOf(Mountain.class, TankerEnemy.class),
-//			UnorderedPair.immutableOf(Mountain.class, BossEnemy.class),
-			UnorderedPair.immutableOf(NormalEnemy.class, NormalEnemy.class)//,
-//			UnorderedPair.immutableOf(SmallerEnemy.class, SmallerEnemy.class),
-//			UnorderedPair.immutableOf(TankerEnemy.class, TankerEnemy.class),
-//			UnorderedPair.immutableOf(BossEnemy.class, BossEnemy.class)
+			UnorderedPair.immutableOf(Mountain.class, SmallerEnemy.class),
+			UnorderedPair.immutableOf(Mountain.class, TankerEnemy.class),
+			UnorderedPair.immutableOf(Mountain.class, BossEnemy.class),
+			UnorderedPair.immutableOf(NormalEnemy.class, NormalEnemy.class),
+			UnorderedPair.immutableOf(SmallerEnemy.class, SmallerEnemy.class),
+			UnorderedPair.immutableOf(TankerEnemy.class, TankerEnemy.class),
+			UnorderedPair.immutableOf(BossEnemy.class, BossEnemy.class)
 	));
 
 	private static final Set<Pair<Class<? extends EffectEntity>, Class<? extends LivingEntity>>> EFFECT_LIVING_SET
 			= new HashSet<>(Set.of(
 			Pair.immutableOf(NormalBullet.class, NormalEnemy.class),
-//			Pair.immutableOf(MachineGunBullet.class, NormalEnemy.class),
-//			Pair.immutableOf(SniperBullet.class, NormalEnemy.class),
-//			Pair.immutableOf(NormalBullet.class, SmallerEnemy.class),
-//			Pair.immutableOf(MachineGunBullet.class, SmallerEnemy.class),
-//			Pair.immutableOf(SniperBullet.class, SmallerEnemy.class),
-//			Pair.immutableOf(NormalBullet.class, TankerEnemy.class),
-//			Pair.immutableOf(MachineGunBullet.class, TankerEnemy.class),
-//			Pair.immutableOf(SniperBullet.class, TankerEnemy.class),
-//			Pair.immutableOf(NormalBullet.class, BossEnemy.class),
-//			Pair.immutableOf(MachineGunBullet.class, BossEnemy.class),
-//			Pair.immutableOf(SniperBullet.class, BossEnemy.class),
-			Pair.immutableOf(NormalEnemy.class, Target.class)//,
-//			Pair.immutableOf(SmallerEnemy.class, Target.class),
-//			Pair.immutableOf(TankerEnemy.class, Target.class),
-//			Pair.immutableOf(BossEnemy.class, Target.class)
+			Pair.immutableOf(MachineGunBullet.class, NormalEnemy.class),
+			Pair.immutableOf(SniperBullet.class, NormalEnemy.class),
+			Pair.immutableOf(NormalBullet.class, SmallerEnemy.class),
+			Pair.immutableOf(MachineGunBullet.class, SmallerEnemy.class),
+			Pair.immutableOf(SniperBullet.class, SmallerEnemy.class),
+			Pair.immutableOf(NormalBullet.class, TankerEnemy.class),
+			Pair.immutableOf(MachineGunBullet.class, TankerEnemy.class),
+			Pair.immutableOf(SniperBullet.class, TankerEnemy.class),
+			Pair.immutableOf(NormalBullet.class, BossEnemy.class),
+			Pair.immutableOf(MachineGunBullet.class, BossEnemy.class),
+			Pair.immutableOf(SniperBullet.class, BossEnemy.class),
+			Pair.immutableOf(NormalEnemy.class, Target.class),
+			Pair.immutableOf(SmallerEnemy.class, Target.class),
+			Pair.immutableOf(TankerEnemy.class, Target.class),
+			Pair.immutableOf(BossEnemy.class, Target.class)
 	));
 
 	private GameEntities() {

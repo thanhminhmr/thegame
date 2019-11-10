@@ -9,9 +9,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.WindowEvent;
 import mrmathami.thegame.drawer.GameDrawer;
-import mrmathami.thegame.entity.GameEntity;
-import mrmathami.thegame.entity.tile.Mountain;
-import mrmathami.thegame.entity.tile.tower.NormalTower;
 import mrmathami.utilities.ThreadFactoryBuilder;
 
 import java.util.concurrent.Executors;
@@ -165,9 +162,9 @@ public final class GameController extends AnimationTimer {
 	}
 
 
-	private Config.KEY_STATUS keyStatus = Config.KEY_STATUS.NONE;
+	private Config.STATUS keyStatus = Config.STATUS.NONE;
 
-	public void setKeyStatus(Config.KEY_STATUS keyStatus) {
+	public void setKeyStatus(Config.STATUS keyStatus) {
 		this.keyStatus = keyStatus;
 	}
 
@@ -224,12 +221,14 @@ public final class GameController extends AnimationTimer {
 			case UPGRADE:
 				return;
 			case NORMAL_TOWER:
-				if (field.getCredit() < 10) return;
-				for (GameEntity gameEntity : a) {
-					if (!gameEntity.getClass().equals(Mountain.class)) return;
-				}
-				field.doSpawn(new NormalTower(tick, x, y));
-				field.getReward(-10);
+				field.buyTower(Config.STATUS.NORMAL_TOWER, x, y);
+				break;
+			case SNIPER_TOWER:
+				field.buyTower(Config.STATUS.SNIPER_TOWER, x, y);
+				break;
+			case MACHINE_GUN_TOWER:
+				field.buyTower(Config.STATUS.MACHINE_GUN_TOWER, x, y);
+				break;
 		}
 	}
 

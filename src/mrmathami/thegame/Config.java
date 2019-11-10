@@ -68,12 +68,15 @@ public final class Config {
 	//region Tower
 	public static final long NORMAL_TOWER_SPEED = 30;
 	public static final double NORMAL_TOWER_RANGE = 5.0;
+	public static final long NORMAL_TOWER_PRICE = 10;
 
 	public static final long MACHINE_GUN_TOWER_SPEED = 5;
 	public static final double MACHINE_GUN_TOWER_RANGE = 4.0;
+	public static final long MACHINE_GUN_TOWER_PRICE = 20;
 
 	public static final long SNIPER_TOWER_SPEED = 60;
 	public static final double SNIPER_TOWER_RANGE = 8.0;
+	public static final long SNIPER_TOWER_PRICE = 20;
 	//endregion
 
 	//region Enemy
@@ -102,9 +105,11 @@ public final class Config {
 	public static final long BOSS_ENEMY_REWARD = 10;
 	//endregion
 
+
 	public static final long START_MONEY = 100;
-	public enum KEY_STATUS {
-		NONE, NORMAL_TOWER, SELL, UPGRADE;
+
+	public enum STATUS {
+		NONE, SELL, UPGRADE, NORMAL_TOWER, SNIPER_TOWER, MACHINE_GUN_TOWER
 	}
 
 	//image
@@ -112,7 +117,9 @@ public final class Config {
 	static final Image START_SCREEN_BACKGROUND = new Image(Config.class.getResourceAsStream("/wait_bg.jpg"));
     static final Image NEW_GAME = new Image(Config.class.getResourceAsStream("/new_game.png"));
     static final Image CONTINUE = new Image(Config.class.getResourceAsStream("/contiune.png"));
-	public static Image CURSOR = new Image(Config.class.getResourceAsStream("/graphic/BlackTileBoundaryGraphic.png"));
+	public static Image NORMAL_TOWER_IMAGE = new Image(Config.class.getResourceAsStream("/BasicTowerGraphic.png"));
+	public static final Image MOUNTAIN_IMAGE = new Image(Config.class.getResourceAsStream("/graphic/BrickTile.png"));
+
 	private Config() {
 	}
 
