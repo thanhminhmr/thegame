@@ -19,7 +19,7 @@ public final class MachineGunBulletDrawer implements EntityDrawer {
 			true,
 			CycleMethod.NO_CYCLE,
 			new Stop(0.0, Color.WHITE),
-			new Stop(0.5, Color.YELLOW),
+			new Stop(0.0, Color.YELLOW),
 			new Stop(1.0, Color.RED)
 	);
 

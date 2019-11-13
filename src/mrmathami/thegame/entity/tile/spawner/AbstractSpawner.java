@@ -42,6 +42,10 @@ public abstract class AbstractSpawner<E extends AbstractEnemy> extends AbstractT
 		}
 	}
 
+	public long getNumOfSpawn() {
+		return numOfSpawn;
+	}
+
 	/**
 	 * Create a new enemy. Each spawner spawn different type of enemy.
 	 * Override this method and return the type of enemy that your spawner spawn.

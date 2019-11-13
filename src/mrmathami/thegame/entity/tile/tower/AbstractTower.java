@@ -12,10 +12,11 @@ import javax.annotation.Nonnull;
 public abstract class AbstractTower<E extends AbstractBullet> extends AbstractTile implements UpdatableEntity {
 	private final double range;
 	private final long speed;
+	private double rotation;
 
 	private long tickDown;
 
-	protected AbstractTower(long createdTick, long posX, long posY, double range, long speed) {
+	AbstractTower(long createdTick, long posX, long posY, double range, long speed) {
 		super(createdTick, posX, posY, 1L, 1L);
 		this.range = range;
 		this.speed = speed;
@@ -38,6 +39,7 @@ public abstract class AbstractTower<E extends AbstractBullet> extends AbstractTi
 				if (dx * dx + dy * dy < range * range) {
 					field.doSpawn(doSpawn(field.getTickCount(), x, y, dx, dy));
 					tickDown = speed;
+					rotation = Math.PI / 2 + Math.atan(dy / dx) + Math.PI * (dx < 0 ? 1 : 0);
 					break;
 				}
 			}
@@ -58,4 +60,8 @@ public abstract class AbstractTower<E extends AbstractBullet> extends AbstractTi
 	 */
 	@Nonnull
 	protected abstract E doSpawn(long createdTick, double posX, double posY, double deltaX, double deltaY);
+
+	public double getRotation() {
+		return Math.toDegrees(rotation);
+	}
 }

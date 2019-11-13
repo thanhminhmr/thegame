@@ -1,9 +1,11 @@
 package mrmathami.thegame.entity;
 
+import java.io.Serializable;
+
 /**
  * Abstract class for game entity.
  */
-public abstract class AbstractEntity implements GameEntity {
+public abstract class AbstractEntity implements GameEntity, Serializable {
 	private final long createdTick;
 	private double posX;
 	private double posY;

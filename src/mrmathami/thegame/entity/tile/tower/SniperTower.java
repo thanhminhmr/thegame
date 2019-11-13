@@ -9,10 +9,11 @@ public final class SniperTower extends AbstractTower<SniperBullet> {
 	public SniperTower(long createdTick, long posX, long posY) {
 		super(createdTick, posX, posY, Config.SNIPER_TOWER_RANGE, Config.SNIPER_TOWER_SPEED);
 	}
-
+//	private AudioClip audioClip = LoadedAudio.getBulletSound();
 	@Nonnull
 	@Override
 	protected final SniperBullet doSpawn(long createdTick, double posX, double posY, double deltaX, double deltaY) {
+//		if (!audioClip.isPlaying()) audioClip.play();
 		return new SniperBullet(createdTick, posX, posY, deltaX, deltaY);
 	}
 }

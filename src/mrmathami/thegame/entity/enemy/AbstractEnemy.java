@@ -1,5 +1,6 @@
 package mrmathami.thegame.entity.enemy;
 
+import javafx.scene.image.Image;
 import mrmathami.thegame.GameEntities;
 import mrmathami.thegame.GameField;
 import mrmathami.thegame.entity.*;
@@ -19,6 +20,7 @@ public abstract class AbstractEnemy extends AbstractEntity implements UpdatableE
 	private long armor;
 	private double speed;
 	private long reward;
+	protected Image image;
 
 	protected AbstractEnemy(long createdTick, double posX, double posY, double size, long health, long armor, double speed, long reward) {
 		super(createdTick, posX, posY, size, size);
@@ -76,7 +78,7 @@ public abstract class AbstractEnemy extends AbstractEntity implements UpdatableE
 	@Override
 	public final void onDestroy(@Nonnull GameField field) {
 		// TODO: reward ... Done!
-		field.getReward(reward);
+		field.credit += reward;
 	}
 
 	@Override

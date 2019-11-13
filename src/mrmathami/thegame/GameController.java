@@ -3,19 +3,28 @@ package mrmathami.thegame;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.WindowEvent;
 import mrmathami.thegame.drawer.GameDrawer;
+import mrmathami.thegame.entity.GameEntity;
+import mrmathami.thegame.entity.enemy.AbstractEnemy;
+import mrmathami.thegame.entity.tile.Mountain;
+import mrmathami.thegame.entity.tile.Target;
+import mrmathami.thegame.entity.tile.spawner.AbstractSpawner;
+import mrmathami.thegame.entity.tile.tower.MachineGunTower;
+import mrmathami.thegame.entity.tile.tower.NormalTower;
+import mrmathami.thegame.entity.tile.tower.SniperTower;
 import mrmathami.utilities.ThreadFactoryBuilder;
 
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 
 /**
  * A game controller. Everything about the game should be managed in here.
@@ -36,12 +45,6 @@ public final class GameController extends AnimationTimer {
 	 * The screen to draw on. Just don't touch me. Google me if you are curious.
 	 */
 	private final GraphicsContext graphicsContext;
-
-	private Consumer<GameField> doPerTick;
-
-	public void setDoPerTick(Consumer<GameField> doPerTick) {
-		this.doPerTick = doPerTick;
-	}
 
 	/**
 	 * Game field. Contain everything in the current game field.
@@ -72,17 +75,15 @@ public final class GameController extends AnimationTimer {
 	 *
 	 * @param graphicsContext the screen to draw on
 	 */
-	public GameController(GraphicsContext graphicsContext) {
+	GameController(GraphicsContext graphicsContext) {
 		// The screen to draw on
 		this.graphicsContext = graphicsContext;
 
 		// Just a few acronyms.
-		final long width = Config.TILE_HORIZONTAL;
-		final long height = Config.TILE_VERTICAL;
 
 		// The game field. Please consider create another way to load a game field.
 		// TODO: I don't have much time, so, spawn some wall then :)
-		this.field = new GameField(GameStage.load("/stage/demo.txt"));
+		this.field = new GameField(Objects.requireNonNull(GameStage.load("/stage/demo.txt")));
 
 		// The drawer. Nothing fun here.
 		this.drawer = new GameDrawer(graphicsContext, field);
@@ -92,6 +93,17 @@ public final class GameController extends AnimationTimer {
 		// that the drawer will select and draw everything in it in an self-defined order.
 		// Can be modified to support zoom in / zoom out of the map.
 		drawer.setFieldViewRegion(0.0, 0.0, Config.TILE_SIZE);
+		credit = new Text(String.valueOf(field.credit));
+		credit.setFont(Config.TEXT_FONT);
+	}
+
+	GameController(GraphicsContext graphicsContext, GameField other) {
+		this.graphicsContext = graphicsContext;
+		this.field = other;
+		this.drawer = new GameDrawer(graphicsContext, field);
+		drawer.setFieldViewRegion(0.0, 0.0, Config.TILE_SIZE);
+		credit = new Text(String.valueOf(field.credit));
+		credit.setFont(Config.TEXT_FONT);
 	}
 
 	/**
@@ -110,11 +122,12 @@ public final class GameController extends AnimationTimer {
 	 */
 	@Override
 	public void handle(long now) {
+		if (status == Config.GAME_STATUS.PAUSE)
+			return;
 		// don't touch me.
 		final long currentTick = tick;
 		final long startNs = System.nanoTime();
 
-		if (doPerTick != null) doPerTick.accept(this.field);
 		// do a tick, as fast as possible
 		field.tick();
 
@@ -131,6 +144,7 @@ public final class GameController extends AnimationTimer {
 		final double mspt = (System.nanoTime() - startNs) / 1000000.0;
 		graphicsContext.setFill(Color.BLACK);
 		graphicsContext.fillText(String.format("MSPT: %3.2f", mspt), 0, 12);
+		credit.setText(String.valueOf(field.credit));
 
 		// if we have time to spend, do a spin
 		while (currentTick == tick) Thread.onSpinWait();
@@ -155,92 +169,103 @@ public final class GameController extends AnimationTimer {
 	 * @param windowEvent currently not used
 	 */
 	final void closeRequestHandler(WindowEvent windowEvent) {
+		if (status != Config.GAME_STATUS.WIN && status != Config.GAME_STATUS.LOSE) {
+			status = Config.GAME_STATUS.PAUSE;
+		}
+		System.out.println("Here");
+		save();
 		scheduledFuture.cancel(true);
 		stop();
 		Platform.exit();
 		System.exit(0);
 	}
 
+	private void save() {
+		try {
+			FileOutputStream fileOutputStream = new FileOutputStream(Config.logPath);
+			ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+			objectOutputStream.writeObject(field);
+			objectOutputStream.close();
+			System.out.println("Saved!");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
-	private Config.STATUS keyStatus = Config.STATUS.NONE;
+	private Text credit;
+	Text getCredit() {
+		return credit;
+	}
+	private Config.KEY_STATUS keyStatus = Config.KEY_STATUS.NONE;
 
-	public void setKeyStatus(Config.STATUS keyStatus) {
+	void setKeyStatus(Config.KEY_STATUS keyStatus) {
 		this.keyStatus = keyStatus;
 	}
-
-	/**
-	 * Key down handler.
-	 *
-	 * @param keyEvent the key that you press down
-	 */
-	final void keyDownHandler(KeyEvent keyEvent) {
-		final KeyCode keyCode = keyEvent.getCode();
-		if (keyCode == KeyCode.W) {
-		} else if (keyCode == KeyCode.S) {
-		} else if (keyCode == KeyCode.A) {
-		} else if (keyCode == KeyCode.D) {
-		} else if (keyCode == KeyCode.I) {
-		} else if (keyCode == KeyCode.J) {
-		} else if (keyCode == KeyCode.K) {
-		} else if (keyCode == KeyCode.L) {
-		}
-	}
-
-	/**
-	 * Key up handler.
-	 *
-	 * @param keyEvent the key that you release up.
-	 */
-	final void keyUpHandler(KeyEvent keyEvent) {
-		final KeyCode keyCode = keyEvent.getCode();
-		if (keyCode == KeyCode.W) {
-		} else if (keyCode == KeyCode.S) {
-		} else if (keyCode == KeyCode.A) {
-		} else if (keyCode == KeyCode.D) {
-		} else if (keyCode == KeyCode.I) {
-		} else if (keyCode == KeyCode.J) {
-		} else if (keyCode == KeyCode.K) {
-		} else if (keyCode == KeyCode.L) {
-		}
-	}
-
-	/**
-	 * Mouse down handler.
-	 *
-	 * @param mouseEvent the mouse button you press down.
-	 */
-	final void mouseDownHandler(MouseEvent mouseEvent) {
-//		mouseEvent.getButton(); // which mouse button?
-//		// Screen coordinate. Remember to convert to field coordinate
-		int x = (int) drawer.screenToFieldPosX(mouseEvent.getX());
-		int y = (int) drawer.screenToFieldPosY(mouseEvent.getY());
-		var a = GameEntities.getOverlappedEntities(field.getEntities(), x, y, 1, 1);
+	void mouseClickHandler(MouseEvent event) {
+		int x = (int) drawer.fieldToScreenPosX(event.getX());
+		int y = (int) drawer.screenToFieldPosY(event.getY());
+		var entities = GameEntities.getOverlappedEntities(field.getEntities(), x, y, 1, 1);
 		switch (keyStatus) {
-			case NONE:
-			case SELL:
-			case UPGRADE:
-				return;
 			case NORMAL_TOWER:
-				field.buyTower(Config.STATUS.NORMAL_TOWER, x, y);
-				break;
-			case SNIPER_TOWER:
-				field.buyTower(Config.STATUS.SNIPER_TOWER, x, y);
+				if (field.credit < Config.NORMAL_TOWER_PRICE) return;
+				for (GameEntity entity : entities) {
+					if (!entity.getClass().equals(Mountain.class)) return;
+				}
+				field.doSpawn(new NormalTower(tick, x, y));
+				field.credit -= Config.NORMAL_TOWER_PRICE;
 				break;
 			case MACHINE_GUN_TOWER:
-				field.buyTower(Config.STATUS.MACHINE_GUN_TOWER, x, y);
+				if (field.credit < Config.MACHINE_GUN_TOWER_PRICE) return;
+				for (GameEntity entity : entities) {
+					if (!entity.getClass().equals(Mountain.class)) return;
+				}
+				field.doSpawn(new MachineGunTower(tick, x, y));
+				field.credit -= Config.MACHINE_GUN_TOWER_PRICE;
 				break;
+			case SNIPER_TOWER:
+				if (field.credit < Config.SNIPER_TOWER_PRICE) return;
+				for (GameEntity entity : entities) {
+					if (!entity.getClass().equals(Mountain.class)) return;
+				}
+				field.doSpawn(new SniperTower(tick, x, y));
+				field.credit -= Config.SNIPER_TOWER_PRICE;
+				break;
+			case SELL:
+				for (GameEntity entity : entities) {
+					switch (entity.getClass().getSimpleName()) {
+						case "NormalTower" :
+							field.credit += Config.NORMAL_TOWER_PRICE;
+							field.destroy(entity);
+							break;
+						case "SniperTower" :
+							field.credit += Config.SNIPER_TOWER_PRICE;
+							field.destroy(entity);
+							break;
+						case "MachineGunTower" :
+							field.credit += Config.MACHINE_GUN_TOWER_PRICE;
+							field.destroy(entity);
+							break;
+						default: break;
+					}
+				}
+				break;
+			case NONE: break;
 		}
 	}
+	private Config.GAME_STATUS status = Config.GAME_STATUS.NONE;
+	private Config.GAME_STATUS getStatus(){
+		var targets = GameEntities.entitiesFilter(field.getEntities(), Target.class);
+		if (targets.isEmpty()) return Config.GAME_STATUS.LOSE;
+		var spawns = GameEntities.entitiesFilter(field.getEntities(), AbstractSpawner.class);
+		for (AbstractSpawner spawn : spawns) {
+			if (spawn.getNumOfSpawn() > 0) return status;
+		}
+		var enemies = GameEntities.entitiesFilter(field.getEntities(), AbstractEnemy.class);
+		if (enemies.isEmpty()) return Config.GAME_STATUS.WIN;
+		return status;
+	}
 
-	/**
-	 * Mouse up handler.
-	 *
-	 * @param mouseEvent the mouse button you release up.
-	 */
-	final void mouseUpHandler(MouseEvent mouseEvent) {
-//		mouseEvent.getButton(); // which mouse button?
-//		// Screen coordinate. Remember to convert to field coordinate
-//		drawer.screenToFieldPosX(mouseEvent.getX());
-//		drawer.screenToFieldPosY(mouseEvent.getY());
+	void setStatus(Config.GAME_STATUS status) {
+		this.status = status;
 	}
 }

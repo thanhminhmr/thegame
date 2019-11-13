@@ -2,31 +2,18 @@ package mrmathami.thegame;
 
 
 import mrmathami.thegame.entity.*;
-import mrmathami.thegame.entity.tile.Mountain;
-import mrmathami.thegame.entity.tile.tower.MachineGunTower;
-import mrmathami.thegame.entity.tile.tower.NormalTower;
-import mrmathami.thegame.entity.tile.tower.SniperTower;
 
 import javax.annotation.Nonnull;
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * Game Field. Created from GameMap for each new stage. Represent the currently playing game.
  */
-public final class GameField {
+public final class GameField implements Serializable {
 	@Nonnull private final Set<GameEntity> entities = new LinkedHashSet<>(Config._TILE_MAP_COUNT);
 	@Nonnull private final Collection<GameEntity> unmodifiableEntities = Collections.unmodifiableCollection(entities);
 	@Nonnull private final List<GameEntity> spawnEntities = new ArrayList<>(Config._TILE_MAP_COUNT);
-
-	private long credit;
-
-	long getCredit() {
-		return credit;
-	}
-
-	public void getReward(long reward) {
-		credit += reward;
-	}
 
 	/**
 	 * Field width
@@ -46,7 +33,7 @@ public final class GameField {
 		this.height = gameStage.getHeight();
 		this.tickCount = 0;
 		entities.addAll(gameStage.getEntities());
-		credit = Config.START_MONEY;
+		credit = Config.START_CREDIT;
 	}
 
 	public final double getWidth() {
@@ -133,23 +120,8 @@ public final class GameField {
 		spawnEntities.clear();
 	}
 
-	public void buyTower(Config.STATUS towerType, long x, long y) {
-		for (GameEntity gameEntity : GameEntities.getOverlappedEntities(entities, x, y, 1, 1)) {
-			if (!gameEntity.getClass().equals(Mountain.class)) return;
-		}
-		switch (towerType) {
-			case NORMAL_TOWER:
-				doSpawn(new NormalTower(tickCount, x, y));
-				getReward(-Config.NORMAL_TOWER_PRICE);
-				break;
-			case MACHINE_GUN_TOWER:
-				doSpawn(new MachineGunTower(tickCount, x, y));
-				getReward(-Config.MACHINE_GUN_TOWER_PRICE);
-				break;
-			case SNIPER_TOWER:
-				doSpawn(new SniperTower(tickCount, x, y));
-				getReward(-Config.SNIPER_TOWER_PRICE);
-				break;
-		}
+	public long credit;
+	public void destroy(GameEntity entity) {
+		entities.remove(entity);
 	}
 }
