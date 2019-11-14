@@ -10,7 +10,7 @@ import javax.annotation.Nonnull;
 import java.util.Collection;
 
 public abstract class AbstractEnemy extends AbstractEntity implements UpdatableEntity, EffectEntity, LivingEntity, DestroyListener {
-	private static final double SQRT_2 = Math.sqrt(2.0) / 2.0;
+	private static final double SQRT_2 = 1 / 2.0;
 	private static final double[][] DELTA_DIRECTION_ARRAY = {
 			{0.0, -1.0}, {0.0, 1.0}, {-1.0, 0.0}, {1.0, 0.0},
 			{-SQRT_2, -SQRT_2}, {SQRT_2, SQRT_2}, {SQRT_2, -SQRT_2}, {-SQRT_2, SQRT_2},
@@ -58,7 +58,7 @@ public abstract class AbstractEnemy extends AbstractEntity implements UpdatableE
 		double minimumDistance = Double.MAX_VALUE;
 		double newPosX = enemyPosX;
 		double newPosY = enemyPosY;
-		for (double realSpeed = speed * 0.125; realSpeed <= speed; realSpeed += realSpeed) {
+		for (double realSpeed = speed * 0.025; realSpeed <= speed; realSpeed += realSpeed) {
 			for (double[] deltaDirection : DELTA_DIRECTION_ARRAY) {
 				final double currentPosX = enemyPosX + deltaDirection[0] * realSpeed;
 				final double currentPosY = enemyPosY + deltaDirection[1] * realSpeed;

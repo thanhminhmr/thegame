@@ -44,8 +44,6 @@ public final class Main extends Application {
 		Button lastGame = new Button("Last Game");
 		lastGame.setOnAction(e -> reload(primaryStage));
 
-		Button sfx = new Button("SFX");
-		sfx.setOnAction(e -> Config.sfx = !Config.sfx);
 		VBox vBox = new VBox(newGame, lastGame);
 		vBox.setSpacing(10);
 		vBox.setAlignment(Pos.CENTER);
@@ -114,8 +112,12 @@ public final class Main extends Application {
 				default: break;
 			}
 		});
-		VBox infoBox = new VBox(moneyLine, normalTowerLine, machineGunTower, sniperTower, sell, pause);
-		infoBox.setAlignment(Pos.CENTER);
+
+		Button sfx = new Button("SFX");
+		sfx.setOnAction(e -> Config.sfx = !Config.sfx);
+
+		VBox infoBox = new VBox(moneyLine, normalTowerLine, machineGunTower, sniperTower, sell, pause, sfx);
+		infoBox.setAlignment(Pos.TOP_CENTER);
 		SplitPane splitPane = new SplitPane(canvas, infoBox);
 		splitPane.setBackground(LoadedImage.BACKGROUND);
 		pane.getChildren().add(splitPane);

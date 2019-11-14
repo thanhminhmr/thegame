@@ -42,14 +42,17 @@ public final class GameStage {
 				final List<GameEntity> entities = new ArrayList<>(width * height + numOfTiles);
 				for (int y = 0; y < height; y++) {
 					for (int x = 0; x < width; x++) {
-						final int value = scanner.nextInt();
-						if (value == 0) {
-							entities.add(new Road(0, x, y));
-						} else if (value == 1) {
-							entities.add(new Mountain(0, x, y));
-						} else {
-							throw new InputMismatchException("Unexpected value! Input value: " + value);
-						}
+//						final int value = scanner.nextInt();
+//						if (value == 0) {
+//							entities.add(new Road(0, x, y));
+//						} else if (value == 1) {
+//							entities.add(new Mountain(0, x, y));
+//						} else {
+//							throw new InputMismatchException("Unexpected value! Input value: " + value);
+//						}
+						String s = scanner.next();
+						if (s.equals("1")) entities.add(new Mountain(0, x, y));
+						else entities.add(new Road(0, x, y, s));
 					}
 				}
 				// path finding
