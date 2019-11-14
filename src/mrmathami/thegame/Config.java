@@ -117,6 +117,7 @@ public final class Config {
 	static final long SNIPER_TOWER_PRICE = 15;
 	static final String logPath = "log";
 	public static boolean sfx = true;
+	public static boolean autoPlay = true;
 
 	private Config() {
 	}

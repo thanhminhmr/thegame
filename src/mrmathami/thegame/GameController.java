@@ -155,6 +155,7 @@ public final class GameController extends AnimationTimer {
         graphicsContext.fillText(String.format("MSPT: %3.2f", mspt), 0, 12);
         credit.setText(String.valueOf(field.credit));
 
+        if (Config.autoPlay && tick % Config.GAME_TPS == 0) autoPlay();
         // if we have time to spend, do a spin
         while (currentTick == tick) Thread.onSpinWait();
     }
@@ -206,8 +207,9 @@ public final class GameController extends AnimationTimer {
 
     private Config.KEY_STATUS keyStatus = Config.KEY_STATUS.NONE;
 
-    void setKeyStatus(Config.KEY_STATUS keyStatus) {
+    void setKey(Config.KEY_STATUS keyStatus, Cursor cursor) {
         this.keyStatus = keyStatus;
+        graphicsContext.getCanvas().getParent().getParent().getParent().setCursor(cursor);
     }
 
     void mouseClickHandler(MouseEvent event) {
@@ -217,14 +219,13 @@ public final class GameController extends AnimationTimer {
         switch (keyStatus) {
             case NORMAL_TOWER:
                 if (field.credit < Config.NORMAL_TOWER_PRICE) {
-                    keyStatus = Config.KEY_STATUS.NONE;
-                    graphicsContext.getCanvas().getParent().getParent().getParent().setCursor(Cursor.DEFAULT);
+                    setKey(Config.KEY_STATUS.NONE, Cursor.DEFAULT);
                     return;
                 }
                 for (GameEntity entity : entities) {
                     if (!entity.getClass().equals(Mountain.class)) {
-                        keyStatus = Config.KEY_STATUS.NONE;
-                        graphicsContext.getCanvas().getParent().getParent().getParent().setCursor(Cursor.DEFAULT);                        return;
+                        setKey(Config.KEY_STATUS.NONE, Cursor.DEFAULT);
+                        return;
                     }
                 }
                 field.doSpawn(new NormalTower(tick, x, y));
@@ -232,14 +233,13 @@ public final class GameController extends AnimationTimer {
                 break;
             case MACHINE_GUN_TOWER:
                 if (field.credit < Config.MACHINE_GUN_TOWER_PRICE) {
-                    keyStatus = Config.KEY_STATUS.NONE;
-                    graphicsContext.getCanvas().getParent().getParent().getParent().setCursor(Cursor.DEFAULT);
+                    setKey(Config.KEY_STATUS.NONE, Cursor.DEFAULT);
                     return;
                 }
                 for (GameEntity entity : entities) {
                     if (!entity.getClass().equals(Mountain.class)) {
-                        keyStatus = Config.KEY_STATUS.NONE;
-                        graphicsContext.getCanvas().getParent().getParent().getParent().setCursor(Cursor.DEFAULT);                        return;
+                        setKey(Config.KEY_STATUS.NONE, Cursor.DEFAULT);
+                        return;
                     }
                 }
                 field.doSpawn(new MachineGunTower(tick, x, y));
@@ -247,14 +247,13 @@ public final class GameController extends AnimationTimer {
                 break;
             case SNIPER_TOWER:
                 if (field.credit < Config.SNIPER_TOWER_PRICE) {
-                    keyStatus = Config.KEY_STATUS.NONE;
-                    graphicsContext.getCanvas().getParent().getParent().getParent().setCursor(Cursor.DEFAULT);
+                    setKey(Config.KEY_STATUS.NONE, Cursor.DEFAULT);
                     return;
                 }
                 for (GameEntity entity : entities) {
                     if (!entity.getClass().equals(Mountain.class)) {
-                        keyStatus = Config.KEY_STATUS.NONE;
-                        graphicsContext.getCanvas().getParent().getParent().getParent().setCursor(Cursor.DEFAULT);                        return;
+                        setKey(Config.KEY_STATUS.NONE, Cursor.DEFAULT);
+                        return;
                     }
                 }
                 field.doSpawn(new SniperTower(tick, x, y));
@@ -283,10 +282,7 @@ public final class GameController extends AnimationTimer {
                             break;
                     }
                 }
-                if (! check) {
-                    keyStatus = Config.KEY_STATUS.NONE;
-                    graphicsContext.getCanvas().getParent().getParent().getParent().setCursor(Cursor.DEFAULT);
-                }
+                if (! check) setKey(Config.KEY_STATUS.NONE, Cursor.DEFAULT);
                 break;
             case NONE:
                 break;
@@ -311,5 +307,56 @@ public final class GameController extends AnimationTimer {
 
     void setStatus(Config.GAME_STATUS status) {
         this.status = status;
+    }
+
+    private void autoPlay() {
+        int rand = (int) (Math.random() * 3);
+        switch (rand) {
+            case 0:
+                if (field.credit >= Config.NORMAL_TOWER_PRICE) {
+                    var mountain = GameEntities.entitiesFilter(field.getEntities(), Mountain.class);
+                    int k = (int) (mountain.size() * Math.random());
+                    for (Mountain m : mountain) {
+                        if (--k < 0) {
+                            var entities = GameEntities.getOverlappedEntities(field.getEntities(), m.getPosX(), m.getPosY(), 1, 1);
+                            if (entities.size() > 1) return;
+                            field.doSpawn(new NormalTower(tick,(long) m.getPosX(),(long) m.getPosY()));
+                            field.credit -= Config.NORMAL_TOWER_PRICE;
+                            return;
+                        }
+                    }
+                }
+                break;
+            case 1:
+                if (field.credit >= Config.SNIPER_TOWER_PRICE) {
+                    var mountain = GameEntities.entitiesFilter(field.getEntities(), Mountain.class);
+                    int k = (int) (mountain.size() * Math.random());
+                    for (Mountain m : mountain) {
+                        if (--k < 0) {
+                            var entities = GameEntities.getOverlappedEntities(field.getEntities(), m.getPosX(), m.getPosY(), 1, 1);
+                            if (entities.size() > 1) return;
+                            field.doSpawn(new SniperTower(tick,(long) m.getPosX(),(long) m.getPosY()));
+                            field.credit -= Config.SNIPER_TOWER_PRICE;
+                            return;
+                        }
+                    }
+                }
+                break;
+            case 2:
+                if (field.credit >= Config.MACHINE_GUN_TOWER_PRICE) {
+                    var mountain = GameEntities.entitiesFilter(field.getEntities(), Mountain.class);
+                    int k = (int) (mountain.size() * Math.random());
+                    for (Mountain m : mountain) {
+                        if (--k < 0) {
+                            var entities = GameEntities.getOverlappedEntities(field.getEntities(), m.getPosX(), m.getPosY(), 1, 1);
+                            if (entities.size() > 1) return;
+                            field.doSpawn(new MachineGunTower(tick,(long) m.getPosX(),(long) m.getPosY()));
+                            field.credit -= Config.MACHINE_GUN_TOWER_PRICE;
+                            return;
+                        }
+                    }
+                }
+                break;
+        }
     }
 }

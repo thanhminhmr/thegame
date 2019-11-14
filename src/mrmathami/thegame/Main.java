@@ -68,10 +68,7 @@ public final class Main extends Application {
 		ImageView normalTower = new ImageView(LoadedImage.NORMAL_TOWER);
 		normalTower.setFitWidth(40);
 		normalTower.setFitHeight(40);
-		normalTower.setOnMouseClicked(e -> {
-			pane.setCursor(new ImageCursor(LoadedImage.NORMAL_TOWER));
-			gameController.setKeyStatus(Config.KEY_STATUS.NORMAL_TOWER);
-		});
+		normalTower.setOnMouseClicked(e -> gameController.setKey(Config.KEY_STATUS.NORMAL_TOWER, new ImageCursor(LoadedImage.NORMAL_TOWER)));
 		final Text normalTowerPrice = new Text(String.valueOf(Config.NORMAL_TOWER_PRICE));
 		normalTowerPrice.setFont(Config.TEXT_FONT);
 		HBox normalTowerLine = new HBox(normalTower, normalTowerPrice);
@@ -80,24 +77,15 @@ public final class Main extends Application {
 		ImageView sniperTower = new ImageView(LoadedImage.SNIPER_TOWER);
 		sniperTower.setFitWidth(40);
 		sniperTower.setFitHeight(40);
-		sniperTower.setOnMouseClicked(e -> {
-			pane.setCursor(new ImageCursor(LoadedImage.SNIPER_TOWER));
-			gameController.setKeyStatus(Config.KEY_STATUS.SNIPER_TOWER);
-		});
+		sniperTower.setOnMouseClicked(e -> gameController.setKey(Config.KEY_STATUS.SNIPER_TOWER, new ImageCursor(LoadedImage.SNIPER_TOWER)));
 
 		ImageView machineGunTower = new ImageView(LoadedImage.MACHINE_GUN_TOWER);
 		machineGunTower.setFitWidth(40);
 		machineGunTower.setFitHeight(40);
-		machineGunTower.setOnMouseClicked(e -> {
-			pane.setCursor(new ImageCursor(LoadedImage.MACHINE_GUN_TOWER));
-			gameController.setKeyStatus(Config.KEY_STATUS.MACHINE_GUN_TOWER);
-		});
+		machineGunTower.setOnMouseClicked(e -> gameController.setKey(Config.KEY_STATUS.MACHINE_GUN_TOWER, new ImageCursor(LoadedImage.MACHINE_GUN_TOWER)));
 
 		Button sell = new Button("Sell");
-		sell.setOnAction(e -> {
-			pane.setCursor(new ImageCursor(LoadedImage.$$$));
-			gameController.setKeyStatus(Config.KEY_STATUS.SELL);
-		});
+		sell.setOnAction(e -> gameController.setKey(Config.KEY_STATUS.SELL, new ImageCursor(LoadedImage.$$$)));
 		Button pause = new Button("Pause");
 		pause.setOnAction(e -> {
 			switch (gameController.getStatus()) {
@@ -116,7 +104,10 @@ public final class Main extends Application {
 		Button sfx = new Button("SFX");
 		sfx.setOnAction(e -> Config.sfx = !Config.sfx);
 
-		VBox infoBox = new VBox(moneyLine, normalTowerLine, machineGunTower, sniperTower, sell, pause, sfx);
+		Button autoPlay = new Button("auto");
+		autoPlay.setOnAction(e -> Config.autoPlay = !Config.autoPlay);
+
+		VBox infoBox = new VBox(moneyLine, normalTowerLine, machineGunTower, sniperTower, sell, pause, sfx, autoPlay);
 		infoBox.setAlignment(Pos.TOP_CENTER);
 		SplitPane splitPane = new SplitPane(canvas, infoBox);
 		splitPane.setBackground(LoadedImage.BACKGROUND);
