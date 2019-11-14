@@ -1,6 +1,7 @@
 package mrmathami.thegame.entity.tile.tower;
 
 import mrmathami.thegame.Config;
+import mrmathami.thegame.LoadedAudio;
 import mrmathami.thegame.entity.bullet.MachineGunBullet;
 
 import javax.annotation.Nonnull;
@@ -16,7 +17,7 @@ public final class MachineGunTower extends AbstractTower<MachineGunBullet> {
 	@Nonnull
 	@Override
 	protected final MachineGunBullet doSpawn(long createdTick, double posX, double posY, double deltaX, double deltaY) {
-//		if (!audioClip.isPlaying()) audioClip.play();
+		if (Config.sfx) LoadedAudio.MACHINE_GUN().play();
 		return new MachineGunBullet(createdTick, posX, posY, deltaX, deltaY);
 	}
 }

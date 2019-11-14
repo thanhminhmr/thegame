@@ -43,6 +43,9 @@ public final class Main extends Application {
 		newGame.setOnMouseClicked(e -> newGame(primaryStage));
 		Button lastGame = new Button("Last Game");
 		lastGame.setOnAction(e -> reload(primaryStage));
+
+		Button sfx = new Button("SFX");
+		sfx.setOnAction(e -> Config.sfx = !Config.sfx);
 		VBox vBox = new VBox(newGame, lastGame);
 		vBox.setSpacing(10);
 		vBox.setAlignment(Pos.CENTER);

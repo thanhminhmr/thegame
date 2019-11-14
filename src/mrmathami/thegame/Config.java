@@ -116,6 +116,7 @@ public final class Config {
 	static final long MACHINE_GUN_TOWER_PRICE = 20;
 	static final long SNIPER_TOWER_PRICE = 15;
 	static final String logPath = "log";
+	public static boolean sfx = true;
 
 	private Config() {
 	}

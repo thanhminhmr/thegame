@@ -1,6 +1,7 @@
 package mrmathami.thegame.entity.tile.tower;
 
 import mrmathami.thegame.Config;
+import mrmathami.thegame.LoadedAudio;
 import mrmathami.thegame.entity.bullet.NormalBullet;
 
 import javax.annotation.Nonnull;
@@ -15,7 +16,7 @@ public final class NormalTower extends AbstractTower<NormalBullet> {
 	@Nonnull
 	@Override
 	protected final NormalBullet doSpawn(long createdTick, double posX, double posY, double deltaX, double deltaY) {
-//		if (!audioClip.isPlaying()) audioClip.play();
+		if (Config.sfx) LoadedAudio.NORMAL().play();
 		return new NormalBullet(createdTick, posX, posY, deltaX, deltaY);
 	}
 }

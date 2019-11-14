@@ -156,7 +156,7 @@ public final class GameController extends AnimationTimer {
         credit.setText(String.valueOf(field.credit));
 
         // if we have time to spend, do a spin
-//        while (currentTick == tick) Thread.onSpinWait();
+        while (currentTick == tick) Thread.onSpinWait();
     }
 
     /**
