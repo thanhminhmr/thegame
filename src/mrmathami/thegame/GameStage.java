@@ -51,7 +51,9 @@ public final class GameStage {
 //							throw new InputMismatchException("Unexpected value! Input value: " + value);
 //						}
 						String s = scanner.next();
-						if (s.equals("1")) entities.add(new Mountain(0, x, y));
+						if (s.equals("1"))
+							if (Math.random() > 0.06) entities.add(new Mountain(0, x, y));
+							else entities.add(new Tree(0, x, y));
 						else entities.add(new Road(0, x, y, s));
 					}
 				}

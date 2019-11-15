@@ -121,7 +121,7 @@ public final class GameField implements Serializable {
 	}
 
 	public long credit;
-	public void destroy(GameEntity entity) {
+	void destroy(GameEntity entity) {
 		entities.remove(entity);
 	}
 }

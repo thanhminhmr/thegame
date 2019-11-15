@@ -14,7 +14,7 @@ public final class SniperTower extends AbstractTower<SniperBullet> {
 	@Nonnull
 	@Override
 	protected final SniperBullet doSpawn(long createdTick, double posX, double posY, double deltaX, double deltaY) {
-		if (Config.sfx) LoadedAudio.SNIPER().play();
+		if (Config.sfx) LoadedAudio.sniper().play();
 		return new SniperBullet(createdTick, posX, posY, deltaX, deltaY);
 	}
 }

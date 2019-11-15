@@ -78,7 +78,7 @@ public abstract class AbstractEnemy extends AbstractEntity implements UpdatableE
 	public final void onDestroy(@Nonnull GameField field) {
 		// TODO: reward ... Done!
 		field.credit += reward;
-		LoadedAudio.ENEMY_DESTROY().play();
+		LoadedAudio.enemyDestroy().play();
 	}
 
 	@Override

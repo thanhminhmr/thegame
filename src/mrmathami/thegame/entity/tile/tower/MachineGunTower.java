@@ -17,7 +17,7 @@ public final class MachineGunTower extends AbstractTower<MachineGunBullet> {
 	@Nonnull
 	@Override
 	protected final MachineGunBullet doSpawn(long createdTick, double posX, double posY, double deltaX, double deltaY) {
-		if (Config.sfx) LoadedAudio.MACHINE_GUN().play();
+		if (Config.sfx) LoadedAudio.machineGun().play();
 		return new MachineGunBullet(createdTick, posX, posY, deltaX, deltaY);
 	}
 }

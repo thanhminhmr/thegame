@@ -115,9 +115,9 @@ public final class Config {
 	static final long NORMAL_TOWER_PRICE = 10;
 	static final long MACHINE_GUN_TOWER_PRICE = 20;
 	static final long SNIPER_TOWER_PRICE = 15;
-	static final String logPath = "log";
+	static final String logPath = "res/log";
 	public static boolean sfx = true;
-	public static boolean music = true;
+	static boolean music = true;
 	static boolean autoPlay = false;
 
 	private Config() {
