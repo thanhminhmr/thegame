@@ -8,6 +8,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.SplitPane;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -112,7 +113,20 @@ public final class Main extends Application {
 			autoPlay.setText(String.format("AutoPlay: %s", (Config.autoPlay) ? "On" : "Off"));
 		});
 
-		VBox infoBox = new VBox(moneyLine, normalTowerLine, machineGunTower, sniperTower, sell, pause, sfx, autoPlay);
+		Button music = new Button(String.format("Music: %s", (Config.music) ? "On" : "Off"));
+		music.setOnAction(event -> {
+			Config.music = !Config.music;
+			music.setText(String.format("Music: %s", (Config.music) ? "On" : "Off"));
+			AudioClip audioClip = LoadedAudio.BACKGROUND_MUSIC;
+			audioClip.setVolume(0.02);
+			audioClip.setCycleCount(AudioClip.INDEFINITE);
+			if(Config.music) {
+				audioClip.play();
+			}
+			else audioClip.stop();
+		});
+
+		VBox infoBox = new VBox(moneyLine, normalTowerLine, machineGunTower, sniperTower, sell, pause, sfx, music, autoPlay);
 		infoBox.setAlignment(Pos.TOP_CENTER);
 		SplitPane splitPane = new SplitPane(canvas, infoBox);
 		splitPane.setBackground(LoadedImage.BACKGROUND);
