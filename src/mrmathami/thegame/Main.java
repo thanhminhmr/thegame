@@ -101,11 +101,16 @@ public final class Main extends Application {
 			}
 		});
 
-		Button sfx = new Button("SFX");
-		sfx.setOnAction(e -> Config.sfx = !Config.sfx);
+		Button sfx = new Button(String.format("SFX: %s", (Config.sfx) ? "On" : "Off"));
+		sfx.setOnAction(e -> {Config.sfx = !Config.sfx;
+			sfx.setText(String.format("SFX: %s", (Config.sfx) ? "On" : "Off"));
+		});
 
-		Button autoPlay = new Button("auto");
-		autoPlay.setOnAction(e -> Config.autoPlay = !Config.autoPlay);
+		Button autoPlay = new Button(String.format("AutoPlay: %s", (Config.autoPlay) ? "On" : "Off"));
+		autoPlay.setOnAction(e -> {
+			Config.autoPlay = !Config.autoPlay;
+			autoPlay.setText(String.format("AutoPlay: %s", (Config.autoPlay) ? "On" : "Off"));
+		});
 
 		VBox infoBox = new VBox(moneyLine, normalTowerLine, machineGunTower, sniperTower, sell, pause, sfx, autoPlay);
 		infoBox.setAlignment(Pos.TOP_CENTER);
