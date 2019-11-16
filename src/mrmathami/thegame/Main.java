@@ -41,7 +41,7 @@ public final class Main extends Application {
 		audioClip.play();
 
 		Button newGame = new Button("New Game");
-		newGame.setOnMouseClicked(e -> newGame(primaryStage));
+		newGame.setOnAction(e -> newGame(primaryStage));
 		Button lastGame = new Button("Last Game");
 		lastGame.setOnAction(e -> reload(primaryStage));
 
@@ -126,7 +126,12 @@ public final class Main extends Application {
 			else audioClip.stop();
 		});
 
-		VBox infoBox = new VBox(moneyLine, normalTowerLine, machineGunTower, sniperTower, sell, pause, sfx, music, autoPlay);
+		Button restart = new Button("Restart");
+		restart.setOnAction(event -> {
+			newGame(stage);
+		});
+
+		VBox infoBox = new VBox(moneyLine, normalTowerLine, machineGunTower, sniperTower, sell, pause, sfx, music, autoPlay, restart);
 		infoBox.setAlignment(Pos.TOP_CENTER);
 		SplitPane splitPane = new SplitPane(canvas, infoBox);
 		splitPane.setBackground(LoadedImage.BACKGROUND);

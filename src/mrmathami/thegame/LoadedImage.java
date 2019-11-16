@@ -16,7 +16,8 @@ public class LoadedImage {
 	public static final Image SMALLER_ENEMY = load("/graphic/smallerEnemy.png");
 	public static final Image TANKER_ENEMY = load("/graphic/tankerEnemy.png");
 	public static final Image BOSS_ENEMY = load("/graphic/bossEnemy.png");
-	static final Image WIN = load("/graphic/winMes.jpg");
+	static final Image WIN = load("/graphic/winMes.png");
+	static final Image LOSE = load("/graphic/bglose.jpg");
 	//public static final Image BACKGROUND = load("/graphic/bg.jfif");
 	private static BackgroundImage loadBGI(String path) {
 		return new BackgroundImage(load(path), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);

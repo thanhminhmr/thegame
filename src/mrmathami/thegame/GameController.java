@@ -129,7 +129,11 @@ public final class GameController extends AnimationTimer {
             case PAUSE:
                 return;
             case WIN:
-                graphicsContext.drawImage(LoadedImage.WIN, 0, 0 , Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
+                graphicsContext.drawImage(LoadedImage.WIN, Config.SCREEN_WIDTH/4, Config.SCREEN_HEIGHT/4 , Config.SCREEN_WIDTH/2, Config.SCREEN_HEIGHT/2);
+                stop();
+                return;
+            case LOSE:
+                graphicsContext.drawImage(LoadedImage.LOSE, 0, 0, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
                 stop();
                 return;
         }
@@ -258,6 +262,20 @@ public final class GameController extends AnimationTimer {
                 }
                 field.doSpawn(new SniperTower(tick, x, y));
                 field.credit -= Config.SNIPER_TOWER_PRICE;
+                break;
+            case TIMER_TOWER:
+                if (field.credit < Config.TIMER_TOWER_PRICE) {
+                    setKey(Config.KEY_STATUS.NONE, Cursor.DEFAULT);
+                    return;
+                }
+                for (GameEntity entity : entities) {
+                    if (!entity.getClass().equals(Mountain.class)) {
+                        setKey(Config.KEY_STATUS.NONE, Cursor.DEFAULT);
+                        return;
+                    }
+                }
+                field.doSpawn(new TimerTower(tick, x, y));
+                field.credit -= Config.TIMER_TOWER_PRICE;
                 break;
             case SELL:
                 boolean check = false;
