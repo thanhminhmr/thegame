@@ -122,16 +122,23 @@ public final class Main extends Application {
 			else LoadedAudio.BACKGROUND_MUSIC.stop();
 		});
 
-		pause.setPrefWidth(60);
-		sfx.setPrefWidth(60);
-		music.setPrefWidth(60);
-		autoPlay.setPrefWidth(60);
-		VBox option = new VBox(pause, sfx, music, autoPlay);
-		option.setAlignment(Pos.CENTER);
+		Button restart = new Button("Restart");
+		restart.setOnAction(e -> {
+			gameController.stop();
+			newGame(stage);
+		});
+
+		pause.setPrefWidth(65);
+		sfx.setPrefWidth(65);
+		music.setPrefWidth(65);
+		autoPlay.setPrefWidth(65);
+		restart.setPrefWidth(65);
+		VBox option = new VBox(pause, sfx, music, autoPlay, restart);
+		option.setAlignment(Pos.BOTTOM_LEFT);
 		option.setSpacing(10);
 
 		VBox infoBox = new VBox(moneyLine, shop, option);
-		infoBox.setAlignment(Pos.TOP_CENTER);
+		infoBox.setAlignment(Pos.CENTER);
 		infoBox.setSpacing(50);
 		infoBox.setFillWidth(true);
 		HBox hBox = new HBox(canvas, infoBox);
