@@ -7,12 +7,13 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.SplitPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
+import javafx.scene.media.AudioClip;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -30,14 +31,17 @@ public final class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		StackPane pane = new StackPane();
-		pane.setPrefWidth(Config.SCREEN_WIDTH + 60);
+		pane.setPrefWidth(Config.SCREEN_WIDTH + 100);
 		pane.setPrefHeight(Config.SCREEN_HEIGHT);
 		pane.setBackground(LoadedImage.BACKGROUND);
 
-		LoadedAudio.BACKGROUND_MUSIC.play();
+		AudioClip audioClip = LoadedAudio.BACKGROUND_MUSIC;
+		audioClip.setVolume(0.02);
+		audioClip.setCycleCount(AudioClip.INDEFINITE);
+		audioClip.play();
 
 		Button newGame = new Button("New Game");
-		newGame.setOnAction(e -> newGame(primaryStage));
+		newGame.setOnMouseClicked(e -> newGame(primaryStage));
 		Button lastGame = new Button("Last Game");
 		lastGame.setOnAction(e -> reload(primaryStage));
 
@@ -48,7 +52,7 @@ public final class Main extends Application {
 		pane.getChildren().add(vBox);
 		Scene scene = new Scene(pane);
 		primaryStage.setScene(scene);
-		primaryStage.setResizable(false);
+		primaryStage.setResizable(true);
 		primaryStage.show();
 	}
 
@@ -69,17 +73,34 @@ public final class Main extends Application {
 	}
 
 	private void renderGameUI(Stage stage, GameField field) {
+		StackPane pane = new StackPane();
 		Canvas canvas = new Canvas(Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
 		canvas.setFocusTraversable(true);
 		GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
 		GameController gameController = (field == null) ? new GameController(graphicsContext) : new GameController(graphicsContext, field);
 		canvas.setOnMouseClicked(gameController::mouseClickHandler);
-		HBox moneyLine = new HBox(LoadedImage.imageView(LoadedImage.$$$, 30, 30), gameController.getCredit());
-		moneyLine.setAlignment(Pos.CENTER_LEFT);
+		HBox moneyLine = new HBox(gameController.getCredit(), new ImageView(LoadedImage.$$$));
+		moneyLine.setAlignment(Pos.CENTER);
 
-		var normalTowerLine = towerLine(LoadedImage.NORMAL_TOWER, Config.KEY_STATUS.NORMAL_TOWER, Config.NORMAL_TOWER_PRICE, gameController);
-		var sniperTowerLine = towerLine(LoadedImage.SNIPER_TOWER, Config.KEY_STATUS.SNIPER_TOWER, Config.SNIPER_TOWER_PRICE, gameController);
-		var machineGunTowerLine = towerLine(LoadedImage.MACHINE_GUN_TOWER, Config.KEY_STATUS.MACHINE_GUN_TOWER, Config.MACHINE_GUN_TOWER_PRICE, gameController);
+		ImageView normalTower = new ImageView(LoadedImage.NORMAL_TOWER);
+		normalTower.setFitWidth(40);
+		normalTower.setFitHeight(40);
+		normalTower.setOnMouseClicked(e -> gameController.setKey(Config.KEY_STATUS.NORMAL_TOWER, new ImageCursor(LoadedImage.NORMAL_TOWER)));
+		final Text normalTowerPrice = new Text(String.valueOf(Config.NORMAL_TOWER_PRICE));
+		normalTowerPrice.setFont(Config.TEXT_FONT);
+		HBox normalTowerLine = new HBox(normalTower, normalTowerPrice);
+		normalTowerLine.setAlignment(Pos.CENTER);
+
+		ImageView sniperTower = new ImageView(LoadedImage.SNIPER_TOWER);
+		sniperTower.setFitWidth(40);
+		sniperTower.setFitHeight(40);
+		sniperTower.setOnMouseClicked(e -> gameController.setKey(Config.KEY_STATUS.SNIPER_TOWER, new ImageCursor(LoadedImage.SNIPER_TOWER)));
+
+		ImageView machineGunTower = new ImageView(LoadedImage.MACHINE_GUN_TOWER);
+		machineGunTower.setFitWidth(40);
+		machineGunTower.setFitHeight(40);
+		machineGunTower.setOnMouseClicked(e -> gameController.setKey(Config.KEY_STATUS.MACHINE_GUN_TOWER, new ImageCursor(LoadedImage.MACHINE_GUN_TOWER)));
+
 		Button sell = new Button("Sell");
 		sell.setOnAction(e -> gameController.setKey(Config.KEY_STATUS.SELL, new ImageCursor(LoadedImage.$$$)));
 		VBox shop = new VBox(normalTowerLine, sniperTowerLine, machineGunTowerLine, sell);
@@ -103,23 +124,27 @@ public final class Main extends Application {
 		});
 
 		Button sfx = new Button(String.format("SFX: %s", (Config.sfx) ? "On" : "Off"));
-		sfx.setOnAction(e -> {
-			Config.sfx = !Config.sfx;
+		sfx.setOnAction(e -> {Config.sfx = !Config.sfx;
 			sfx.setText(String.format("SFX: %s", (Config.sfx) ? "On" : "Off"));
 		});
 
-		Button autoPlay = new Button(String.format("AP: %s", (Config.autoPlay) ? "On" : "Off"));
+		Button autoPlay = new Button(String.format("AutoPlay: %s", (Config.autoPlay) ? "On" : "Off"));
 		autoPlay.setOnAction(e -> {
 			Config.autoPlay = !Config.autoPlay;
-			autoPlay.setText(String.format("AP: %s", (Config.autoPlay) ? "On" : "Off"));
+			autoPlay.setText(String.format("AutoPlay: %s", (Config.autoPlay) ? "On" : "Off"));
 		});
 
-		Button music = new Button(String.format("Ms: %s", (Config.music) ? "On" : "Off"));
+		Button music = new Button(String.format("Music: %s", (Config.music) ? "On" : "Off"));
 		music.setOnAction(event -> {
 			Config.music = !Config.music;
-			music.setText(String.format("Ms: %s", (Config.music) ? "On" : "Off"));
-			if (Config.music) LoadedAudio.BACKGROUND_MUSIC.play();
-			else LoadedAudio.BACKGROUND_MUSIC.stop();
+			music.setText(String.format("Music: %s", (Config.music) ? "On" : "Off"));
+			AudioClip audioClip = LoadedAudio.BACKGROUND_MUSIC;
+			audioClip.setVolume(0.02);
+			audioClip.setCycleCount(AudioClip.INDEFINITE);
+			if(Config.music) {
+				audioClip.play();
+			}
+			else audioClip.stop();
 		});
 
 		Button restart = new Button("Restart");
@@ -143,18 +168,29 @@ public final class Main extends Application {
 		infoBox.setFillWidth(true);
 		HBox hBox = new HBox(canvas, infoBox);
 		hBox.setBackground(LoadedImage.focusBackground);
+		VBox infoBox = new VBox(moneyLine, normalTowerLine, machineGunTower, sniperTower, sell, pause, sfx, music, autoPlay);
+		infoBox.setAlignment(Pos.TOP_CENTER);
+		SplitPane splitPane = new SplitPane(canvas, infoBox);
+		splitPane.setBackground(LoadedImage.BACKGROUND);
+		pane.getChildren().add(splitPane);
 		gameController.start();
 		stage.setOnCloseRequest(gameController::closeRequestHandler);
-		stage.setScene(new Scene(hBox));
+		stage.setScene(new Scene(pane));
 	}
 
-	private static VBox towerLine(Image towerImage, Config.KEY_STATUS keyStatus, long towerPrice, GameController controller){
-		ImageView tower = LoadedImage.imageView(towerImage, 35, 35);
-		tower.setOnMouseClicked(e -> controller.setKey(keyStatus, new ImageCursor(towerImage)));
-		final Text price = new Text(String.valueOf(towerPrice));
-		price.setFont(Font.font(15));
-		VBox vBox = new VBox(tower, price);
-		vBox.setAlignment(Pos.CENTER);
-		return vBox;
+	private void newGame(Stage stage) {
+		renderGameUI(stage, null);
+	}
+
+	private void reload(Stage stage) {
+		GameField loadedField = null;
+		try {
+			FileInputStream fileInputStream = new FileInputStream(Config.logPath);
+			ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+			loadedField = (GameField) objectInputStream.readObject();
+			objectInputStream.close();
+			fileInputStream.close();
+		} catch (Exception ignore) {}
+		renderGameUI(stage, loadedField);
 	}
 }
