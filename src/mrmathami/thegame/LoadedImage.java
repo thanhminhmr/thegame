@@ -1,13 +1,17 @@
 package mrmathami.thegame;
 
+import javafx.geometry.Insets;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 
 public class LoadedImage {
 	private static Image load(String path) {
 		return new Image(LoadedImage.class.getResourceAsStream(path));
 	}
 	public static final Image MOUNTAIN = load("/graphic/mountain.png");
+	public static final Image TREE = load("/graphic/tree.png");
 	public static final Image NORMAL_TOWER = load("/graphic/normalTower.png");
 	public static final Image MACHINE_GUN_TOWER = load("/graphic/machineGunTower.png");
 	public static final Image SNIPER_TOWER = load("/graphic/sniperTower.png");
@@ -24,7 +28,6 @@ public class LoadedImage {
 	}
 	static final Background BACKGROUND = new Background(loadBGI("/graphic/bg.jfif"));
 	public static final Image TARGET = load("/graphic/target.png");
-	public static final Image SPAWN = load("/graphic/bHome.png");
 
 //	public static final Image ROAD = load("/graphic/road.png");
 	public static final Image ROAD_0 = load("/graphic/road/road0.png");
@@ -40,4 +43,14 @@ public class LoadedImage {
 	public static final Image ROAD_B = load("/graphic/road/roadB.png");
 	public static final Image ROAD_C = load("/graphic/road/roadC.png");
 	public static final Image ROAD_D = load("/graphic/road/roadD.png");
+
+	static ImageView imageView(Image image, double width, double height) {
+		ImageView imageView = new ImageView(image);
+		imageView.setFitWidth(width);
+		imageView.setFitHeight(height);
+		return imageView;
+	}
+
+	static final Background focusBackground = new Background( new BackgroundFill( Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY ) );
+	static final Background unFocusBackground = new Background( new BackgroundFill( Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY ) );
 }

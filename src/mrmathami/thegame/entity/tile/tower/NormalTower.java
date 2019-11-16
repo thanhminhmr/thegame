@@ -16,7 +16,7 @@ public final class NormalTower extends AbstractTower<NormalBullet> {
 	@Nonnull
 	@Override
 	protected final NormalBullet doSpawn(long createdTick, double posX, double posY, double deltaX, double deltaY) {
-		if (Config.sfx) LoadedAudio.NORMAL().play();
+		if (Config.sfx) LoadedAudio.normal().play();
 		return new NormalBullet(createdTick, posX, posY, deltaX, deltaY);
 	}
 }

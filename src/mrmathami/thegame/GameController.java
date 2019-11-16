@@ -12,8 +12,10 @@ import mrmathami.thegame.drawer.GameDrawer;
 import mrmathami.thegame.entity.GameEntity;
 import mrmathami.thegame.entity.enemy.AbstractEnemy;
 import mrmathami.thegame.entity.tile.Mountain;
+import mrmathami.thegame.entity.tile.Road;
 import mrmathami.thegame.entity.tile.Target;
 import mrmathami.thegame.entity.tile.spawner.AbstractSpawner;
+import mrmathami.thegame.entity.tile.tower.AbstractTower;
 import mrmathami.thegame.entity.tile.tower.MachineGunTower;
 import mrmathami.thegame.entity.tile.tower.NormalTower;
 import mrmathami.thegame.entity.tile.tower.SniperTower;
@@ -129,11 +131,10 @@ public final class GameController extends AnimationTimer {
             case PAUSE:
                 return;
             case WIN:
-                graphicsContext.drawImage(LoadedImage.WIN, Config.SCREEN_WIDTH/4, Config.SCREEN_HEIGHT/4 , Config.SCREEN_WIDTH/2, Config.SCREEN_HEIGHT/2);
+                graphicsContext.drawImage(LoadedImage.WIN, 0, 0 , Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
                 stop();
                 return;
             case LOSE:
-                graphicsContext.drawImage(LoadedImage.LOSE, 0, 0, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
                 stop();
                 return;
         }
@@ -219,6 +220,7 @@ public final class GameController extends AnimationTimer {
     void mouseClickHandler(MouseEvent event) {
         int x = (int) drawer.fieldToScreenPosX(event.getX());
         int y = (int) drawer.screenToFieldPosY(event.getY());
+        if (keyStatus == Config.KEY_STATUS.NONE) return;
         var entities = GameEntities.getOverlappedEntities(field.getEntities(), x, y, 1, 1);
         switch (keyStatus) {
             case NORMAL_TOWER:
@@ -262,20 +264,6 @@ public final class GameController extends AnimationTimer {
                 }
                 field.doSpawn(new SniperTower(tick, x, y));
                 field.credit -= Config.SNIPER_TOWER_PRICE;
-                break;
-            case TIMER_TOWER:
-                if (field.credit < Config.TIMER_TOWER_PRICE) {
-                    setKey(Config.KEY_STATUS.NONE, Cursor.DEFAULT);
-                    return;
-                }
-                for (GameEntity entity : entities) {
-                    if (!entity.getClass().equals(Mountain.class)) {
-                        setKey(Config.KEY_STATUS.NONE, Cursor.DEFAULT);
-                        return;
-                    }
-                }
-                field.doSpawn(new TimerTower(tick, x, y));
-                field.credit -= Config.TIMER_TOWER_PRICE;
                 break;
             case SELL:
                 boolean check = false;

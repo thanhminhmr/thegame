@@ -41,7 +41,7 @@ public final class Main extends Application {
 		audioClip.play();
 
 		Button newGame = new Button("New Game");
-		newGame.setOnAction(e -> newGame(primaryStage));
+		newGame.setOnMouseClicked(e -> newGame(primaryStage));
 		Button lastGame = new Button("Last Game");
 		lastGame.setOnAction(e -> reload(primaryStage));
 
@@ -54,6 +54,22 @@ public final class Main extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.setResizable(true);
 		primaryStage.show();
+	}
+
+	private void newGame(Stage stage) {
+		renderGameUI(stage, null);
+	}
+
+	private void reload(Stage stage) {
+		GameField loadedField = null;
+		try {
+			FileInputStream fileInputStream = new FileInputStream(Config.logPath);
+			ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+			loadedField = (GameField) objectInputStream.readObject();
+			objectInputStream.close();
+			fileInputStream.close();
+		} catch (Exception ignore) {}
+		renderGameUI(stage, loadedField);
 	}
 
 	private void renderGameUI(Stage stage, GameField field) {
@@ -87,6 +103,11 @@ public final class Main extends Application {
 
 		Button sell = new Button("Sell");
 		sell.setOnAction(e -> gameController.setKey(Config.KEY_STATUS.SELL, new ImageCursor(LoadedImage.$$$)));
+		VBox shop = new VBox(normalTowerLine, sniperTowerLine, machineGunTowerLine, sell);
+		shop.setAlignment(Pos.TOP_CENTER);
+		shop.setSpacing(10);
+//		shop.setBackground(LoadedImage.focusBackground);
+
 		Button pause = new Button("Pause");
 		pause.setOnAction(e -> {
 			switch (gameController.getStatus()) {
@@ -126,12 +147,7 @@ public final class Main extends Application {
 			else audioClip.stop();
 		});
 
-		Button restart = new Button("Restart");
-		restart.setOnAction(event -> {
-			newGame(stage);
-		});
-
-		VBox infoBox = new VBox(moneyLine, normalTowerLine, machineGunTower, sniperTower, sell, pause, sfx, music, autoPlay, restart);
+		VBox infoBox = new VBox(moneyLine, normalTowerLine, machineGunTower, sniperTower, sell, pause, sfx, music, autoPlay);
 		infoBox.setAlignment(Pos.TOP_CENTER);
 		SplitPane splitPane = new SplitPane(canvas, infoBox);
 		splitPane.setBackground(LoadedImage.BACKGROUND);
