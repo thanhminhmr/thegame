@@ -108,7 +108,8 @@ public final class GameController extends AnimationTimer {
 		this.drawer = new GameDrawer(graphicsContext, field);
 		drawer.setFieldViewRegion(0.0, 0.0, Config.TILE_SIZE);
 		credit = new Text(String.valueOf(field.credit));
-		credit.setFont(Config.TEXT_FONT);
+        credit.setFont(Font.font(20));
+        credit.setFill(Color.YELLOW);
 	}
 
 	/**
@@ -128,15 +129,16 @@ public final class GameController extends AnimationTimer {
     @Override
     public void handle(long now) {
         switch (getStatus()) {
-            case NONE:
-                break;
-            case PAUSE:
-                return;
+            case NONE: break;
+            case PAUSE: return;
             case WIN:
-                graphicsContext.drawImage(LoadedImage.WIN, 0, 0 , Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
+                graphicsContext.drawImage(LoadedImage.WIN, Config.SCREEN_WIDTH / 6, Config.SCREEN_HEIGHT / 6 , Config.SCREEN_WIDTH * 2 / 3, Config.SCREEN_HEIGHT * 2 / 3);
+                if (Config.sfx) LoadedAudio.WIN.play();
                 stop();
                 return;
             case LOSE:
+                graphicsContext.drawImage(LoadedImage.LOSE, 0, 0, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
+                if (Config.sfx) LoadedAudio.LOSE.play();
                 stop();
                 return;
         }
@@ -162,7 +164,7 @@ public final class GameController extends AnimationTimer {
 //        graphicsContext.fillText(String.format("MSPT: %3.2f", mspt), 0, 12);
         credit.setText(String.valueOf(field.credit));
 
-        if (Config.autoPlay && tick % (Config.GAME_TPS * 3) == 0) autoPlay();
+        if (Config.autoPlay && tick % (Config.GAME_TPS * 2) == 0) autoPlay();
         // if we have time to spend, do a spin
         while (currentTick == tick) Thread.onSpinWait();
     }
@@ -186,13 +188,16 @@ public final class GameController extends AnimationTimer {
      * @param windowEvent currently not used
      */
     final void closeRequestHandler(WindowEvent windowEvent) {
-        if (status != Config.GAME_STATUS.WIN && status != Config.GAME_STATUS.LOSE) {
-            save();
-        }
-        scheduledFuture.cancel(true);
+        if (status != Config.GAME_STATUS.WIN && status != Config.GAME_STATUS.LOSE) save();
         stop();
         Platform.exit();
         System.exit(0);
+    }
+
+    @Override
+    public void stop() {
+        scheduledFuture.cancel(true);
+        super.stop();
     }
 
     private void save() {
@@ -227,13 +232,14 @@ public final class GameController extends AnimationTimer {
                 setKey(Config.KEY_STATUS.NONE, Cursor.DEFAULT);
                 return;
             }
+        if (status != Config.GAME_STATUS.NONE) return;
         if (keyStatus == Config.KEY_STATUS.SELL) {
             var towers = GameEntities.entitiesFilter(entities, AbstractTower.class);
             for (AbstractTower tower : towers) {
                 switch (tower.getClass().getSimpleName()) {
-                    case "NormalTower":     field.credit += Config.NORMAL_TOWER_PRICE;      break;
-                    case "SniperTower":     field.credit += Config.SNIPER_TOWER_PRICE;      break;
-                    case "MachineGunTower": field.credit += Config.MACHINE_GUN_TOWER_PRICE; break;
+                    case "NormalTower":     field.credit += 0.8 * Config.NORMAL_TOWER_PRICE;        break;
+                    case "SniperTower":     field.credit += 0.8 * Config.SNIPER_TOWER_PRICE;        break;
+                    case "MachineGunTower": field.credit += 0.8 * Config.MACHINE_GUN_TOWER_PRICE;   break;
                 }
                 field.destroy(tower);
             }

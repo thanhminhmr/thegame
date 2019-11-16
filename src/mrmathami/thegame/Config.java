@@ -1,12 +1,10 @@
 package mrmathami.thegame;
 
-import javafx.scene.text.Font;
-
 public final class Config {
 	/**
 	 * Game name. Change it if you want.
 	 */
-	public static final String GAME_NAME = "The Game";
+	public static final String GAME_NAME = "TOWER DEFENSE";
 	/**
 	 * Ticks per second
 	 */
@@ -52,28 +50,28 @@ public final class Config {
 	//Other config related to other entities in the game.
 
 	//region Bullet
-	public static final long NORMAL_BULLET_TTL = 30;
-	public static final long NORMAL_BULLET_STRENGTH = 10;
-	public static final double NORMAL_BULLET_SPEED = 0.4;
+	public static final long NORMAL_BULLET_TTL = 15;
+	public static final long NORMAL_BULLET_STRENGTH = 15;
+	public static final double NORMAL_BULLET_SPEED = 0.6;
 
-	public static final long MACHINE_GUN_BULLET_TTL = 15;
+	public static final long MACHINE_GUN_BULLET_TTL = 11;
 	public static final long MACHINE_GUN_BULLET_STRENGTH = 10;
-	public static final double MACHINE_GUN_BULLET_SPEED = 0.4;
+	public static final double MACHINE_GUN_BULLET_SPEED = 0.7;
 
-	public static final long SNIPER_BULLET_TTL = 60;
-	public static final long SNIPER_BULLET_STRENGTH = 60;
-	public static final double SNIPER_BULLET_SPEED = 0.6;
+	public static final long SNIPER_BULLET_TTL = 10;
+	public static final long SNIPER_BULLET_STRENGTH = 40;
+	public static final double SNIPER_BULLET_SPEED = 0.9;
 	//endregion
 
 	//region Tower
-	public static final long NORMAL_TOWER_SPEED = 50;
+	public static final long NORMAL_TOWER_SPEED = 30;
 	public static final double NORMAL_TOWER_RANGE = 5.0;
 
-	public static final long MACHINE_GUN_TOWER_SPEED = 5;
+	public static final long MACHINE_GUN_TOWER_SPEED = 8;
 	public static final double MACHINE_GUN_TOWER_RANGE = 4.0;
 
-	public static final long SNIPER_TOWER_SPEED = 100;
-	public static final double SNIPER_TOWER_RANGE = 8.0;
+	public static final long SNIPER_TOWER_SPEED = 60;
+	public static final double SNIPER_TOWER_RANGE = 7.0;
 	//endregion
 
 	//region Enemy
@@ -102,8 +100,7 @@ public final class Config {
 	public static final long BOSS_ENEMY_REWARD = 10;
 	//endregion
 
-	static final long START_CREDIT = 100;
-	static final Font TEXT_FONT = new Font(20);
+	static final long START_CREDIT = 150;
 
 	enum KEY_STATUS {
 		NONE, NORMAL_TOWER, SNIPER_TOWER, MACHINE_GUN_TOWER, SELL

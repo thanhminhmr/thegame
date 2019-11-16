@@ -1,16 +1,18 @@
 package mrmathami.thegame.entity.enemy;
 
+import mrmathami.thegame.Config;
 import mrmathami.thegame.GameEntities;
 import mrmathami.thegame.GameField;
 import mrmathami.thegame.LoadedAudio;
 import mrmathami.thegame.entity.*;
+import mrmathami.thegame.entity.tile.Explosion;
 import mrmathami.thegame.entity.tile.Road;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
 
 public abstract class AbstractEnemy extends AbstractEntity implements UpdatableEntity, EffectEntity, LivingEntity, DestroyListener {
-	private static final double SQRT_2 = 1 / 2.0;
+	private static final double SQRT_2 = Math.sqrt(2) / 2.0;
 	private static final double[][] DELTA_DIRECTION_ARRAY = {
 			{0.0, -1.0}, {0.0, 1.0}, {-1.0, 0.0}, {1.0, 0.0},
 			{-SQRT_2, -SQRT_2}, {SQRT_2, SQRT_2}, {SQRT_2, -SQRT_2}, {-SQRT_2, SQRT_2},
@@ -58,7 +60,7 @@ public abstract class AbstractEnemy extends AbstractEntity implements UpdatableE
 		double minimumDistance = Double.MAX_VALUE;
 		double newPosX = enemyPosX;
 		double newPosY = enemyPosY;
-		for (double realSpeed = speed * 0.025; realSpeed <= speed; realSpeed += realSpeed) {
+		for (double realSpeed = speed * 0.125; realSpeed <= speed; realSpeed += realSpeed) {
 			for (double[] deltaDirection : DELTA_DIRECTION_ARRAY) {
 				final double currentPosX = enemyPosX + deltaDirection[0] * realSpeed;
 				final double currentPosY = enemyPosY + deltaDirection[1] * realSpeed;
@@ -78,7 +80,8 @@ public abstract class AbstractEnemy extends AbstractEntity implements UpdatableE
 	public final void onDestroy(@Nonnull GameField field) {
 		// TODO: reward ... Done!
 		field.credit += reward;
-		LoadedAudio.enemyDestroy().play();
+		if (Config.sfx) LoadedAudio.enemyDestroy().play();
+		field.doSpawn(new Explosion(0, this));
 	}
 
 	@Override
@@ -86,6 +89,8 @@ public abstract class AbstractEnemy extends AbstractEntity implements UpdatableE
 		// TODO: harm the target ... Done!
 		livingEntity.doEffect(-health);
 		this.health = Long.MIN_VALUE;
+		if (livingEntity instanceof  AbstractEntity)
+			field.doSpawn(new Explosion(0, (AbstractEntity) livingEntity));
 		return false;
 	}
 

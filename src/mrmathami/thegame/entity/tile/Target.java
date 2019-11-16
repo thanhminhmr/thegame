@@ -8,10 +8,12 @@ import javax.annotation.Nonnull;
 
 public final class Target extends AbstractTile implements LivingEntity, DestroyListener{
 	private long health;
+	public final long MAX_HP;
 
 	public Target(long createdTick, long posX, long posY, long width, long height, long health) {
 		super(createdTick, posX, posY, width, height);
 		this.health = health;
+		MAX_HP = health;
 	}
 
 	@Override
@@ -36,6 +38,5 @@ public final class Target extends AbstractTile implements LivingEntity, DestroyL
 
 	@Override
 	public void onDestroy(@Nonnull GameField field) {
-		System.out.println("You lose!");
 	}
 }

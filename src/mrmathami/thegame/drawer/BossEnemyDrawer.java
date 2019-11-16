@@ -23,7 +23,7 @@ public final class BossEnemyDrawer implements EntityDrawer {
 			BossEnemy enemy = ((BossEnemy) entity);
 			graphicsContext.setFill(Color.BLUE);
 			double blue = enemy.getHealth() * screenWidth / Config.BOSS_ENEMY_HEALTH;
-			graphicsContext.fillRect(screenPosX, screenPosY - 10, blue, 3);
+			graphicsContext.fillRect(screenPosX + screenWidth / 6, screenPosY - 10, blue * 2 / 3, 3);
 		}
 		graphicsContext.drawImage(LoadedImage.BOSS_ENEMY, screenPosX, screenPosY, screenWidth, screenHeight);
 	}

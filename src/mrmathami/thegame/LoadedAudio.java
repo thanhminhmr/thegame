@@ -14,15 +14,15 @@ public class LoadedAudio {
     }
 
     public static AudioClip sniper() {
-        return load("/audio/bulletSound.mp3", 0.02, 1);
+        return load("/audio/bulletSound.mp3", 0.03, 1);
     }
 
     public static AudioClip normal() {
-        return load("/audio/normalTower.mp3", 0.03, 1);
+        return load("/audio/normalTower.mp3", 0.04, 1);
     }
 
     public static AudioClip machineGun() {
-        return load("/audio/normalTower.mp3" , 0.02, 1);
+        return load("/audio/normalTower.mp3" , 0.04, 1);
     }
 
     public static AudioClip enemyDestroy() {
@@ -31,7 +31,8 @@ public class LoadedAudio {
 
     static AudioClip BACKGROUND_MUSIC = backgroundMusic();
     private static AudioClip backgroundMusic() {
-        return load("/audio/swordland.mp3", 0.02, AudioClip.INDEFINITE);
+        return load("/audio/swordland.mp3", 0.03, AudioClip.INDEFINITE);
     }
-
+    static AudioClip WIN = load("/audio/smb_world_clear.wav", 0.5, 1);
+    static AudioClip LOSE = load("/audio/smb_gameover.wav", 0.5, 1);
 }

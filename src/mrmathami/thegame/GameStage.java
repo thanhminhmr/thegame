@@ -4,7 +4,7 @@ import mrmathami.thegame.entity.GameEntity;
 import mrmathami.thegame.entity.tile.Mountain;
 import mrmathami.thegame.entity.tile.Road;
 import mrmathami.thegame.entity.tile.Target;
-import mrmathami.thegame.entity.tile.Tree;
+import mrmathami.thegame.entity.tile.Obstacle;
 import mrmathami.thegame.entity.tile.spawner.BossSpawner;
 import mrmathami.thegame.entity.tile.spawner.NormalSpawner;
 import mrmathami.thegame.entity.tile.spawner.SmallerSpawner;
@@ -53,8 +53,8 @@ public final class GameStage {
 //						}
 						String s = scanner.next();
 						if (s.equals("1"))
-							if (Math.random() > 0.1) entities.add(new Mountain(0, x, y));
-							else entities.add(new Tree(0, x, y));
+							if (Math.random() > 0.2) entities.add(new Mountain(0, x, y, (int) (Math.random() * 4)));
+							else entities.add(new Obstacle(0, x, y, (int) (Math.random() * 3)));
 						else entities.add(new Road(0, x, y, s));
 					}
 				}

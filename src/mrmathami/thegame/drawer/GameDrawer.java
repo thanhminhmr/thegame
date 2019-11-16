@@ -5,7 +5,6 @@ import javafx.scene.paint.Color;
 import mrmathami.thegame.Config;
 import mrmathami.thegame.GameEntities;
 import mrmathami.thegame.GameField;
-import mrmathami.thegame.entity.tile.Tree;
 import mrmathami.thegame.entity.GameEntity;
 import mrmathami.thegame.entity.bullet.MachineGunBullet;
 import mrmathami.thegame.entity.bullet.NormalBullet;
@@ -14,9 +13,7 @@ import mrmathami.thegame.entity.enemy.BossEnemy;
 import mrmathami.thegame.entity.enemy.NormalEnemy;
 import mrmathami.thegame.entity.enemy.SmallerEnemy;
 import mrmathami.thegame.entity.enemy.TankerEnemy;
-import mrmathami.thegame.entity.tile.Mountain;
-import mrmathami.thegame.entity.tile.Road;
-import mrmathami.thegame.entity.tile.Target;
+import mrmathami.thegame.entity.tile.*;
 import mrmathami.thegame.entity.tile.spawner.BossSpawner;
 import mrmathami.thegame.entity.tile.spawner.NormalSpawner;
 import mrmathami.thegame.entity.tile.spawner.SmallerSpawner;
@@ -40,7 +37,7 @@ public final class GameDrawer {
 	@Nonnull private static final List<Class<?>> ENTITY_DRAWING_ORDER = List.of(
 			Road.class,
 			Mountain.class,
-			Tree.class,
+			Obstacle.class,
 			NormalTower.class,
 			SniperTower.class,
 			MachineGunTower.class,
@@ -55,7 +52,8 @@ public final class GameDrawer {
 			SmallerSpawner.class,
 			TankerSpawner.class,
 			BossSpawner.class,
-			Target.class
+			Target.class,
+			Explosion.class
 	);
 	/**
 	 * TODO:
@@ -79,8 +77,9 @@ public final class GameDrawer {
 			Map.entry(SmallerSpawner.class, new SpawnerDrawer()),
 			Map.entry(TankerSpawner.class, new SpawnerDrawer()),
 			Map.entry(BossSpawner.class, new SpawnerDrawer()),
-			Map.entry(Tree.class, new TreeDrawer()),
-			Map.entry(Target.class, new TargetDrawer())
+			Map.entry(Obstacle.class, new ObstacleDrawer()),
+			Map.entry(Target.class, new TargetDrawer()),
+			Map.entry(Explosion.class, new ExplosionDrawer())
 	));
 
 	@Nonnull private final GraphicsContext graphicsContext;

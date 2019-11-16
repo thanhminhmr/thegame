@@ -17,7 +17,7 @@
 1 1 6 5 5 5 5 5 5 5 7 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 0 3 1 1
 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 0 3 1 1
 Target 25 14 3 3 200
-NormalSpawner 2 0 3 3 100 90 20
-SmallerSpawner 28 3 2 2 150 300 10
-TankerSpawner 2 0 3 3 200 600 5
-BossSpawner 2 0 3 3 600 700 2
+NormalSpawner 2 0 3 3 100 90 15
+SmallerSpawner 28 3 2 2 80 200 20
+TankerSpawner 2 0 3 3 200 500 5
+BossSpawner 2 0 3 3 600 600 2

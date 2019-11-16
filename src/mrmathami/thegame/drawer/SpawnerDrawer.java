@@ -11,6 +11,5 @@ public final class SpawnerDrawer implements EntityDrawer {
 //		graphicsContext.setStroke(Color.DARKBLUE);
 //		graphicsContext.setLineWidth(4);
 //		graphicsContext.strokeRect(screenPosX, screenPosY, screenWidth, screenHeight);
-//		graphicsContext.drawImage(LoadedImage.SPAWN, screenPosX, screenPosY, screenWidth, screenHeight);
 	}
 }

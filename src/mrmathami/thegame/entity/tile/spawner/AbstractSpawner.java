@@ -2,13 +2,14 @@ package mrmathami.thegame.entity.tile.spawner;
 
 import mrmathami.thegame.GameEntities;
 import mrmathami.thegame.GameField;
+import mrmathami.thegame.entity.DestroyableEntity;
 import mrmathami.thegame.entity.UpdatableEntity;
 import mrmathami.thegame.entity.enemy.AbstractEnemy;
 import mrmathami.thegame.entity.tile.AbstractTile;
 
 import javax.annotation.Nonnull;
 
-public abstract class AbstractSpawner<E extends AbstractEnemy> extends AbstractTile implements UpdatableEntity {
+public abstract class AbstractSpawner<E extends AbstractEnemy> extends AbstractTile implements UpdatableEntity, DestroyableEntity {
 	private final double spawningSize;
 	@Nonnull private final Class<E> spawningClass;
 	private final long spawnInterval;
@@ -58,4 +59,14 @@ public abstract class AbstractSpawner<E extends AbstractEnemy> extends AbstractT
 	 */
 	@Nonnull
 	protected abstract E doSpawn(long createdTick, double posX, double posY);
+
+	@Override
+	public void doDestroy() {
+
+	}
+
+	@Override
+	public boolean isDestroyed() {
+		return numOfSpawn <= 0;
+	}
 }
