@@ -126,7 +126,9 @@ public final class Main extends Application {
 			newGame(stage);
 		});
 
-		VBox option = new VBox(LoadedImage.imageView(LoadedImage.SETTING, 50, 15, false),pause, sfx, music, autoPlay, restart);
+		ImageView settingTitle = LoadedImage.imageView(LoadedImage.SETTING, 50, 15, false);
+
+		VBox option = new VBox(settingTitle, autoPlay, pause, sfx, music, restart);
 		option.setAlignment(Pos.CENTER);
 		option.setSpacing(5);
 

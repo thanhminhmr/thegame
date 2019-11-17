@@ -7,7 +7,7 @@ import mrmathami.thegame.entity.GameEntity;
 import mrmathami.thegame.entity.enemy.BossEnemy;
 import mrmathami.thegame.entity.enemy.NormalEnemy;
 import mrmathami.thegame.entity.enemy.TankerEnemy;
-import mrmathami.thegame.entity.tile.Explosion;
+import mrmathami.thegame.entity.Explosion;
 
 import javax.annotation.Nonnull;
 

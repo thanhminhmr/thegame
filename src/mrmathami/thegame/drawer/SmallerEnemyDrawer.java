@@ -22,8 +22,11 @@ public final class SmallerEnemyDrawer implements EntityDrawer {
 		if (entity instanceof SmallerEnemy) {
 			SmallerEnemy enemy = ((SmallerEnemy) entity);
 			graphicsContext.setFill(Color.BLUE);
-			double blue = enemy.getHealth() * screenWidth / Config.SMALLER_ENEMY_HEALTH;
-			graphicsContext.fillRect(screenPosX + screenWidth / 6, screenPosY - 10, blue * 2 / 3, 3);
+			double blue = enemy.getHealth() * screenWidth / Config.SMALLER_ENEMY_HEALTH * (2.0 / 3);
+			double red = screenWidth * 2 / 3 - blue;
+			graphicsContext.fillRect(screenPosX + screenWidth / 6, screenPosY - 10, blue, 3);
+			graphicsContext.setFill(Color.RED);
+			graphicsContext.fillRect(screenPosX + screenWidth / 6 + blue, screenPosY - 10, red, 3);
 		}
 		graphicsContext.drawImage(LoadedImage.SMALLER_ENEMY, screenPosX, screenPosY, screenWidth, screenHeight);
 

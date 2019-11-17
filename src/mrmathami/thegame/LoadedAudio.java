@@ -18,7 +18,7 @@ public class LoadedAudio {
     }
 
     public static AudioClip normal() {
-        return load("/audio/normalTower.mp3", 0.04, 1);
+        return load("/audio/normalTower.mp3", 0.05, 1);
     }
 
     public static AudioClip machineGun() {
@@ -26,12 +26,14 @@ public class LoadedAudio {
     }
 
     public static AudioClip enemyDestroy() {
-        return load("/audio/enemyDestroy.mp3", 0.03, 1);
+        return load("/audio/enemyDestroy.mp3", 0.04, 1);
     }
 
     static AudioClip BACKGROUND_MUSIC = backgroundMusic();
     private static AudioClip backgroundMusic() {
-        return load("/audio/swordland.mp3", 0.03, AudioClip.INDEFINITE);
+        AudioClip audioClip = load("/audio/swordland.mp3", 0.03, AudioClip.INDEFINITE);
+        audioClip.setPriority(1);
+        return audioClip;
     }
     static AudioClip WIN = load("/audio/smb_world_clear.wav", 0.5, 1);
     static AudioClip LOSE = load("/audio/smb_gameover.wav", 0.5, 1);

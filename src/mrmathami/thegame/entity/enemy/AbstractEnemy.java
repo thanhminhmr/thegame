@@ -5,7 +5,7 @@ import mrmathami.thegame.GameEntities;
 import mrmathami.thegame.GameField;
 import mrmathami.thegame.LoadedAudio;
 import mrmathami.thegame.entity.*;
-import mrmathami.thegame.entity.tile.Explosion;
+import mrmathami.thegame.entity.Explosion;
 import mrmathami.thegame.entity.tile.Road;
 
 import javax.annotation.Nonnull;

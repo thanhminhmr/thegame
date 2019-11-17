@@ -1,4 +1,4 @@
-package mrmathami.thegame.entity.tile;
+package mrmathami.thegame.entity;
 
 import mrmathami.thegame.Config;
 import mrmathami.thegame.GameField;
